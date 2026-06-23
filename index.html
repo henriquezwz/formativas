@@ -9,94 +9,101 @@
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
 <style>
   :root{
-    --ink:#16243f;--ink-soft:#46536e;--paper:#f5f3ec;--card:#fff;--line:#ded9cc;
-    --brand:#1b4d8f;--brand-soft:#e7eef8;--accent:#e0892f;--accent-soft:#fbeede;
-    --ok:#1f8a4c;--ok-soft:#e4f3ea;--no:#c0392b;--no-soft:#fbe9e7;
-    --shadow:0 6px 22px rgba(22,36,63,.10);
+    --ink:#1f2440;--ink-soft:#5b6280;--card:#ffffff;--line:#e7e3f2;
+    --brand:#6d28d9;--brand2:#2563eb;--brand-soft:#efe9fd;
+    --accent:#f59e0b;--ok:#15a05a;--ok-soft:#e3f7ec;--no:#dc2626;--no-soft:#fde8e8;
   }
   *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
   html,body{margin:0;padding:0;}
-  body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
-    background:var(--paper);color:var(--ink);line-height:1.5;padding:16px;}
+  body{
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    color:var(--ink);line-height:1.5;padding:18px;min-height:100vh;
+    background:linear-gradient(135deg,#7b2ff7 0%,#2575fc 48%,#18c8d4 100%);
+    background-attachment:fixed;
+  }
   #app{max-width:760px;margin:0 auto;}
-  .card{background:var(--card);border:1px solid var(--line);border-radius:18px;box-shadow:var(--shadow);padding:24px 20px;}
-  .school{text-align:center;border-bottom:2px solid var(--brand);padding-bottom:12px;margin-bottom:18px;}
-  .school strong{display:block;font-size:.92rem;letter-spacing:.04em;color:var(--brand);}
-  .school span{font-size:.78rem;color:var(--ink-soft);}
-  .eyebrow{font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);font-weight:700;margin-bottom:6px;}
-  h1{font-size:1.4rem;margin:0 0 4px;line-height:1.2;}
-  h2{font-size:1.15rem;margin:0 0 2px;}
-  .sub{color:var(--ink-soft);font-size:.92rem;margin:0 0 18px;}
-  label{display:block;font-weight:600;font-size:.88rem;margin:14px 0 6px;}
-  input,textarea,select{width:100%;padding:12px 14px;font-size:1rem;border:1.5px solid var(--line);
-    border-radius:12px;background:#fff;color:var(--ink);font-family:inherit;}
-  textarea{min-height:130px;resize:vertical;font-family:ui-monospace,Menlo,Consolas,monospace;font-size:.82rem;}
-  input:focus,textarea:focus,select:focus{outline:none;border-color:var(--brand);box-shadow:0 0 0 3px var(--brand-soft);}
-  .btn{appearance:none;border:none;cursor:pointer;font-family:inherit;font-weight:700;font-size:.98rem;
-    padding:13px 18px;border-radius:12px;background:var(--brand);color:#fff;transition:filter .15s,transform .05s;width:100%;}
+  .card{background:var(--card);border-radius:24px;box-shadow:0 18px 50px rgba(40,20,90,.28);padding:24px 22px;}
+  .banner{background:linear-gradient(135deg,#7b2ff7,#2575fc);color:#fff;border-radius:18px;padding:16px;margin-bottom:20px;text-align:center;box-shadow:0 6px 18px rgba(80,40,160,.3);}
+  .banner strong{display:block;font-size:.98rem;letter-spacing:.02em;}
+  .banner span{font-size:.78rem;opacity:.92;}
+  .eyebrow{font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:var(--brand);font-weight:800;margin-bottom:6px;}
+  h1{font-size:1.55rem;margin:0 0 4px;line-height:1.15;background:linear-gradient(90deg,#7b2ff7,#2575fc);-webkit-background-clip:text;background-clip:text;color:transparent;}
+  h2{font-size:1.2rem;margin:0 0 2px;}
+  .sub{color:var(--ink-soft);font-size:.94rem;margin:0 0 18px;}
+  label{display:block;font-weight:700;font-size:.88rem;margin:14px 0 6px;}
+  input,textarea,select{width:100%;padding:13px 14px;font-size:1rem;border:1.5px solid var(--line);border-radius:14px;background:#fff;color:var(--ink);font-family:inherit;}
+  input:focus,textarea:focus,select:focus{outline:none;border-color:var(--brand);box-shadow:0 0 0 4px var(--brand-soft);}
+  .btn{appearance:none;border:none;cursor:pointer;font-family:inherit;font-weight:800;font-size:1rem;
+    padding:15px 18px;border-radius:14px;color:#fff;width:100%;transition:filter .15s,transform .05s;
+    background:linear-gradient(135deg,#7b2ff7,#2575fc);box-shadow:0 6px 16px rgba(80,40,160,.28);}
   .btn:hover{filter:brightness(1.07);} .btn:active{transform:translateY(1px);}
-  .btn.ghost{background:#fff;color:var(--brand);border:1.5px solid var(--brand);}
-  .btn.amber{background:var(--accent);} .btn.soft{background:var(--brand-soft);color:var(--brand);}
-  .btn.danger{background:#fff;color:var(--no);border:1.5px solid var(--no);}
-  .btn.sm{width:auto;padding:8px 14px;font-size:.85rem;}
+  .btn:disabled{opacity:.45;cursor:not-allowed;box-shadow:none;}
+  .btn.ghost{background:#fff;color:var(--brand);border:2px solid var(--brand);box-shadow:none;}
+  .btn.amber{background:linear-gradient(135deg,#f59e0b,#f97316);}
+  .btn.soft{background:var(--brand-soft);color:var(--brand);box-shadow:none;}
+  .btn.danger{background:#fff;color:var(--no);border:2px solid var(--no);box-shadow:none;}
+  .btn.sm{width:auto;padding:9px 14px;font-size:.85rem;border-radius:11px;}
   .row{display:flex;gap:10px;flex-wrap:wrap;} .row .btn{width:auto;flex:1;}
   .mt{margin-top:14px;} .mt-s{margin-top:8px;}
   .hint{font-size:.82rem;color:var(--ink-soft);margin-top:12px;}
-  .back{background:none;border:none;color:var(--brand);font-weight:700;cursor:pointer;font-size:.9rem;padding:0;margin-bottom:14px;font-family:inherit;}
-  .tile{display:flex;justify-content:space-between;align-items:center;gap:12px;border:1.5px solid var(--line);
-    border-radius:14px;padding:15px 16px;margin-bottom:10px;background:#fff;cursor:pointer;transition:.12s;}
-  .tile:hover{border-color:var(--brand);background:var(--brand-soft);}
-  .tile .t-main{flex:1;} .tile .t-title{font-weight:700;} .tile .t-meta{font-size:.82rem;color:var(--ink-soft);}
-  .tag{display:inline-block;padding:3px 10px;border-radius:99px;font-size:.74rem;font-weight:700;}
-  .tag.on{background:var(--ok-soft);color:var(--ok);} .tag.off{background:var(--no-soft);color:var(--no);}
-  .tag.done{background:var(--ok-soft);color:var(--ok);}
+  .back{background:none;border:none;color:var(--brand);font-weight:800;cursor:pointer;font-size:.9rem;padding:0;margin-bottom:14px;font-family:inherit;}
+  /* tiles coloridos (turmas) */
+  .ctile{display:flex;justify-content:space-between;align-items:center;gap:12px;border-radius:18px;padding:18px 18px;margin-bottom:12px;cursor:pointer;color:#fff;transition:transform .1s,box-shadow .15s;box-shadow:0 8px 18px rgba(40,20,90,.18);}
+  .ctile:hover{transform:translateY(-2px);box-shadow:0 12px 24px rgba(40,20,90,.26);}
+  .ctile .ct-title{font-weight:800;font-size:1.12rem;}
+  .ctile .ct-arrow{font-size:1.3rem;opacity:.9;}
+  /* tiles atividade */
+  .atile{display:flex;align-items:center;gap:14px;border:1.5px solid var(--line);border-radius:16px;padding:14px 15px;margin-bottom:11px;background:#fff;cursor:pointer;transition:.12s;}
+  .atile:hover{border-color:var(--brand);background:var(--brand-soft);}
+  .atile .ico{flex:none;width:46px;height:46px;border-radius:13px;display:flex;align-items:center;justify-content:center;font-size:1.4rem;color:#fff;}
+  .atile .a-main{flex:1;} .atile .a-title{font-weight:800;} .atile .a-meta{font-size:.82rem;color:var(--ink-soft);}
+  .tag{display:inline-block;padding:4px 11px;border-radius:99px;font-size:.74rem;font-weight:800;}
+  .tag.done{background:var(--ok-soft);color:var(--ok);} .tag.go{background:var(--brand-soft);color:var(--brand);}
+  /* admin tile (professor) */
+  .row-item{display:flex;justify-content:space-between;align-items:center;gap:10px;border:1.5px solid var(--line);border-radius:14px;padding:13px 14px;margin-bottom:10px;background:#fff;}
+  .row-item .ri-main{flex:1;} .row-item .ri-title{font-weight:800;} .row-item .ri-meta{font-size:.8rem;color:var(--ink-soft);}
   .tabs{display:flex;gap:8px;margin:4px 0 18px;}
-  .tabs button{flex:1;padding:10px;border:1.5px solid var(--line);background:#fff;border-radius:10px;font-weight:700;
-    color:var(--ink-soft);cursor:pointer;font-family:inherit;font-size:.9rem;}
-  .tabs button.active{background:var(--brand);color:#fff;border-color:var(--brand);}
+  .tabs button{flex:1;padding:11px;border:1.5px solid var(--line);background:#fff;border-radius:12px;font-weight:800;color:var(--ink-soft);cursor:pointer;font-family:inherit;font-size:.9rem;}
+  .tabs button.active{background:linear-gradient(135deg,#7b2ff7,#2575fc);color:#fff;border-color:transparent;}
   table{width:100%;border-collapse:collapse;font-size:.86rem;}
   th,td{text-align:left;padding:9px 8px;border-bottom:1px solid var(--line);}
-  th{color:var(--ink-soft);font-size:.76rem;text-transform:uppercase;letter-spacing:.06em;}
-  .scroll{overflow:auto;max-height:60vh;border:1px solid var(--line);border-radius:12px;}
+  th{color:var(--ink-soft);font-size:.74rem;text-transform:uppercase;letter-spacing:.06em;}
+  .scroll{overflow:auto;max-height:58vh;border:1px solid var(--line);border-radius:14px;}
   .empty{text-align:center;color:var(--ink-soft);padding:26px 10px;font-size:.92rem;}
-  .warn{background:var(--no-soft);color:var(--no);border-radius:10px;padding:10px 14px;font-size:.86rem;margin-top:12px;}
-  .info{background:var(--brand-soft);color:var(--brand);border-radius:10px;padding:11px 14px;font-size:.86rem;margin-top:12px;}
-  .linkbox{background:var(--paper);border:1px dashed var(--line);border-radius:10px;padding:10px 12px;font-size:.8rem;word-break:break-all;margin-top:8px;font-family:ui-monospace,monospace;}
+  .warn{background:var(--no-soft);color:var(--no);border-radius:12px;padding:11px 14px;font-size:.86rem;margin-top:12px;}
+  .info{background:var(--brand-soft);color:var(--brand);border-radius:12px;padding:12px 14px;font-size:.86rem;margin-top:12px;}
+  .linkbox{background:#faf8ff;border:1px dashed var(--line);border-radius:10px;padding:10px 12px;font-size:.8rem;word-break:break-all;margin-top:8px;font-family:ui-monospace,monospace;}
+  .filebtn{display:flex;align-items:center;justify-content:center;gap:8px;border:2px dashed var(--brand);border-radius:16px;padding:20px;color:var(--brand);font-weight:800;cursor:pointer;background:var(--brand-soft);text-align:center;}
+  .filebtn:hover{filter:brightness(.98);}
   .topbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;font-size:.84rem;color:var(--ink-soft);}
-  .progress{height:8px;background:var(--line);border-radius:99px;overflow:hidden;margin-bottom:20px;}
-  .progress>i{display:block;height:100%;background:var(--brand);width:0;transition:width .3s;}
-  .qtext{font-size:1.1rem;font-weight:600;margin:6px 0 4px;}
-  .qphrase{background:var(--brand-soft);border-left:4px solid var(--brand);padding:9px 13px;border-radius:0 10px 10px 0;margin:12px 0 16px;font-style:italic;}
-  .opt{display:flex;align-items:center;gap:12px;border:1.5px solid var(--line);border-radius:12px;padding:12px 14px;margin-bottom:10px;cursor:pointer;background:#fff;transition:.12s;}
+  .progress{height:10px;background:var(--line);border-radius:99px;overflow:hidden;margin-bottom:20px;}
+  .progress>i{display:block;height:100%;background:linear-gradient(90deg,#7b2ff7,#2575fc);width:0;transition:width .3s;}
+  .qtext{font-size:1.12rem;font-weight:700;margin:6px 0 4px;}
+  .qphrase{background:var(--brand-soft);border-left:4px solid var(--brand);padding:10px 13px;border-radius:0 12px 12px 0;margin:12px 0 16px;font-style:italic;}
+  .opt{display:flex;align-items:center;gap:12px;border:1.5px solid var(--line);border-radius:14px;padding:13px 14px;margin-bottom:10px;cursor:pointer;background:#fff;transition:.12s;}
   .opt:hover{border-color:var(--brand);} .opt.sel{border-color:var(--brand);background:var(--brand-soft);}
-  .opt .key{flex:none;width:30px;height:30px;border-radius:8px;background:var(--paper);display:flex;align-items:center;justify-content:center;font-weight:700;color:var(--ink-soft);}
-  .opt.sel .key{background:var(--brand);color:#fff;}
-  .score-big{font-size:3rem;font-weight:800;line-height:1;color:var(--brand);}
-  .score-of{font-size:1.05rem;color:var(--ink-soft);font-weight:600;}
-  .pill{display:inline-block;padding:6px 14px;border-radius:99px;font-weight:700;font-size:.88rem;margin-top:10px;}
-  .rev{border:1px solid var(--line);border-radius:12px;padding:13px 14px;margin-bottom:10px;}
+  .opt .key{flex:none;width:32px;height:32px;border-radius:9px;background:#f3f0fb;display:flex;align-items:center;justify-content:center;font-weight:800;color:var(--ink-soft);}
+  .opt.sel .key{background:linear-gradient(135deg,#7b2ff7,#2575fc);color:#fff;}
+  .score-big{font-size:3.2rem;font-weight:900;line-height:1;background:linear-gradient(90deg,#7b2ff7,#2575fc);-webkit-background-clip:text;background-clip:text;color:transparent;}
+  .score-of{font-size:1.05rem;color:var(--ink-soft);font-weight:700;-webkit-text-fill-color:var(--ink-soft);}
+  .pill{display:inline-block;padding:7px 16px;border-radius:99px;font-weight:800;font-size:.9rem;margin-top:10px;}
+  .rev{border:1px solid var(--line);border-radius:14px;padding:13px 14px;margin-bottom:10px;}
   .rev.correct{border-color:var(--ok);background:var(--ok-soft);} .rev.wrong{border-color:var(--no);background:var(--no-soft);}
-  .rev .rtag{font-weight:700;font-size:.8rem;} .rev.correct .rtag{color:var(--ok);} .rev.wrong .rtag{color:var(--no);}
+  .rev .rtag{font-weight:800;font-size:.8rem;} .rev.correct .rtag{color:var(--ok);} .rev.wrong .rtag{color:var(--no);}
   .rev p{margin:6px 0 0;font-size:.9rem;} .rev .exp{font-size:.86rem;color:var(--ink-soft);margin-top:8px;border-top:1px dashed var(--line);padding-top:8px;}
-  .mem-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:14px 0;}
-  .mcard{aspect-ratio:3/4;border-radius:12px;border:1.5px solid var(--line);background:var(--brand);color:#fff;
-    display:flex;align-items:center;justify-content:center;text-align:center;padding:6px;font-size:.8rem;font-weight:600;cursor:pointer;}
-  .mcard.up{background:#fff;color:var(--ink);border-color:var(--brand);}
-  .mcard.matched{background:var(--ok-soft);color:var(--ok);border-color:var(--ok);cursor:default;}
+  .mem-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:9px;margin:14px 0;}
+  .mcard{aspect-ratio:3/4;border-radius:14px;border:none;background:linear-gradient(135deg,#7b2ff7,#2575fc);color:#fff;display:flex;align-items:center;justify-content:center;text-align:center;padding:6px;font-size:.82rem;font-weight:700;cursor:pointer;box-shadow:0 4px 10px rgba(40,20,90,.18);}
+  .mcard.up{background:#fff;color:var(--ink);border:1.5px solid var(--brand);}
+  .mcard.matched{background:var(--ok-soft);color:var(--ok);cursor:default;box-shadow:none;}
   .hidden{display:none;} .center{text-align:center;}
+  .check{display:flex;align-items:center;gap:8px;margin:0;white-space:nowrap;font-weight:700;}
+  .check input{width:auto;}
   @media(max-width:480px){.mem-grid{grid-template-columns:repeat(3,1fr);}}
 </style>
 </head>
 <body>
 <div id="app"></div>
-
 <script>
-/* ============================================================
-   ⚙️  CONFIGURAÇÃO — PREENCHA ANTES DE PUBLICAR
-   1. Cole abaixo o objeto firebaseConfig do seu projeto Firebase.
-   2. Em TEACHER_EMAIL, coloque o e-mail que SÓ você usará como professor.
-      (Esse mesmo e-mail também vai nas Regras de Segurança.)
-   ============================================================ */
 const firebaseConfig = {
   apiKey: "AIzaSyBi_caSlZLTqeC6RdrN2ENz0ntelXsBHOE",
   authDomain: "formativas-e-forms.firebaseapp.com",
@@ -106,38 +113,42 @@ const firebaseConfig = {
   appId: "1:321240528071:web:e6d2569b922385a2e07ae2"
 };
 const TEACHER_EMAIL = "henriquezw@outlook.com";
-/* ============================================================ */
 
 const KEYS=["A","B","C","D","E"];
+const CORES=[["#ef476f","#ff7aa2"],["#f78c1f","#ffb454"],["#ffb703","#ffd166"],["#06d6a0","#34e0b5"],["#118ab2","#2bb7df"],["#7c3aed","#a06bff"],["#ec4899","#ff7bc0"],["#22c55e","#56e08a"]];
 let db,auth;
 const app=document.getElementById("app");
 const norm=s=>(s||"").trim().replace(/\s+/g," ");
 const esc=s=>(s==null?"":String(s)).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 const fmt=n=>Number(n).toFixed(1).replace(".",",");
-const SCHOOL='<div class="school"><strong>ESCOLA SESI ABÍLIO RODRIGUES PATTO</strong><span>Plataforma de Atividades — Prof. Paulo Henrique</span></div>';
+const SCHOOL='<div class="banner"><strong>SESI · Prof. Paulo Henrique</strong><span>Plataforma de Atividades</span></div>';
 const isTeacher=()=>auth.currentUser&&auth.currentUser.email&&auth.currentUser.email.toLowerCase()===TEACHER_EMAIL.toLowerCase();
+const grad=(c)=>`linear-gradient(135deg,${c[0]},${c[1]})`;
 
 function boot(){
   if(JSON.stringify(firebaseConfig).includes("COLE_AQUI")||TEACHER_EMAIL.includes("seu-email")){
-    app.innerHTML=`<div class="card">${SCHOOL}<div class="eyebrow">Configuração necessária</div>
-      <h1>Quase lá 👋</h1><p class="sub">Abra este arquivo num editor de texto e preencha, no topo do código, o <b>firebaseConfig</b> e o <b>TEACHER_EMAIL</b>. Depois publique de novo.</p>
-      <div class="info">Siga o passo a passo (GUIA-instalacao) que veio junto.</div></div>`;
-    return;
+    app.innerHTML=`<div class="card">${SCHOOL}<h1>Configuração necessária</h1><p class="sub">Preencha o firebaseConfig e o TEACHER_EMAIL no topo do código.</p></div>`;return;
   }
-  firebase.initializeApp(firebaseConfig);
-  auth=firebase.auth(); db=firebase.firestore();
+  firebase.initializeApp(firebaseConfig); auth=firebase.auth(); db=firebase.firestore();
   const h=new URLSearchParams(location.hash.slice(1));
   if(h.get("t")){ alunoEntrarTurma(h.get("t")); return; }
   home();
 }
 async function ensureStudentAuth(){ if(!auth.currentUser) await auth.signInAnonymously(); }
 
-/* ---------- DB (Firestore) ---------- */
+/* ---------- DB ---------- */
 function clean(d,id){ return Object.assign({id},d); }
 async function dbTurmas(){ const s=await db.collection("turmas").get(); return s.docs.map(d=>clean(d.data(),d.id)).sort((a,b)=>(a.nome||"").localeCompare(b.nome||"")); }
 async function dbTurma(id){ const d=await db.collection("turmas").doc(id).get(); if(!d.exists)throw new Error("Turma não encontrada"); return clean(d.data(),d.id); }
 async function dbCriarTurma(nome){ await db.collection("turmas").add({nome,created_at:new Date().toISOString()}); }
-async function dbApagarTurma(id){ await db.collection("turmas").doc(id).delete(); }
+async function dbRenomearTurma(id,nome){ await db.collection("turmas").doc(id).update({nome}); }
+async function dbApagarTurmaFull(id){
+  const a=await db.collection("atividades").where("turma_id","==",id).get();
+  for(const doc of a.docs) await doc.ref.delete();
+  const r=await db.collection("respostas").where("turma_id","==",id).get();
+  for(const doc of r.docs) await doc.ref.delete();
+  await db.collection("turmas").doc(id).delete();
+}
 async function dbAtividades(turmaId,soAtivas){ const s=await db.collection("atividades").where("turma_id","==",turmaId).get();
   let a=s.docs.map(d=>clean(d.data(),d.id)); if(soAtivas)a=a.filter(x=>x.ativo); return a.sort((x,y)=>(y.created_at||"").localeCompare(x.created_at||"")); }
 async function dbCriarAtividade(o){ await db.collection("atividades").add(Object.assign({created_at:new Date().toISOString()},o)); }
@@ -150,10 +161,11 @@ async function dbMinhasRespostas(turmaId){ const s=await db.collection("resposta
 /* ---------- HOME ---------- */
 function home(){
   location.hash="";
-  app.innerHTML=`<div class="card">${SCHOOL}<div class="eyebrow">Bem-vindo</div>
-    <h1>Plataforma de Atividades</h1><p class="sub">Escolha como deseja entrar.</p>
-    <button class="btn" id="ba">Sou aluno(a)</button>
-    <button class="btn ghost mt" id="bp">Sou o(a) professor(a)</button></div>`;
+  app.innerHTML=`<div class="card">${SCHOOL}
+    <div class="eyebrow">Bem-vindo 👋</div>
+    <h1>Vamos aprender!</h1><p class="sub">Escolha como deseja entrar.</p>
+    <button class="btn" id="ba">🎒 Sou aluno(a)</button>
+    <button class="btn ghost mt" id="bp">👩‍🏫 Sou o(a) professor(a)</button></div>`;
   document.getElementById("ba").onclick=alunoTurmas;
   document.getElementById("bp").onclick=profLogin;
 }
@@ -165,43 +177,45 @@ async function alunoTurmas(){
   try{ await ensureStudentAuth(); const t=await dbTurmas(); const box=document.getElementById("lista");
     if(!t.length){box.innerHTML='<p class="empty">Nenhuma turma disponível ainda.</p>';return;}
     box.innerHTML="";
-    t.forEach(tu=>{const d=document.createElement("div");d.className="tile";
-      d.innerHTML=`<div class="t-main"><div class="t-title">${esc(tu.nome)}</div></div><span class="tag on">Entrar ›</span>`;
+    t.forEach((tu,i)=>{const d=document.createElement("div");d.className="ctile";d.style.background=grad(CORES[i%CORES.length]);
+      d.innerHTML=`<span class="ct-title">${esc(tu.nome)}</span><span class="ct-arrow">›</span>`;
       d.onclick=()=>alunoNome(tu);box.appendChild(d);});
   }catch(e){erro(e);}
 }
 async function alunoEntrarTurma(id){ try{await ensureStudentAuth(); const t=await dbTurma(id); alunoNome(t);}catch(e){home();} }
 function alunoNome(turma){
   app.innerHTML=`<div class="card">${SCHOOL}<button class="back" onclick="alunoTurmas()">‹ Turmas</button>
-    <div class="eyebrow">${esc(turma.nome)}</div><h2>Identifique-se</h2>
-    <label for="nm">Seu nome completo</label><input type="text" id="nm" placeholder="Digite seu nome" autocomplete="off">
+    <div class="eyebrow">${esc(turma.nome)}</div><h2>Qual é o seu nome?</h2>
+    <label for="nm">Nome completo</label><input type="text" id="nm" placeholder="Digite seu nome" autocomplete="off">
     <div id="w" class="warn hidden">Digite seu nome para continuar.</div>
-    <button class="btn mt" id="go">Ver atividades</button></div>`;
+    <button class="btn mt" id="go">Ver atividades →</button></div>`;
   document.getElementById("go").onclick=()=>{const nm=norm(document.getElementById("nm").value);
     if(!nm){document.getElementById("w").classList.remove("hidden");return;} alunoAtividades(turma,nm);};
 }
 async function alunoAtividades(turma,nome){
   app.innerHTML=`<div class="card">${SCHOOL}<button class="back" onclick="alunoTurmas()">‹ Sair</button>
     <div class="eyebrow">${esc(turma.nome)} · ${esc(nome.split(" ")[0])}</div>
-    <h2>Atividades</h2><div id="lista"><p class="empty">Carregando…</p></div></div>`;
+    <h2>Suas atividades</h2><div id="lista"><p class="empty">Carregando…</p></div></div>`;
   try{
     const [ats,minhas]=await Promise.all([dbAtividades(turma.id,true),dbMinhasRespostas(turma.id)]);
     const box=document.getElementById("lista");
-    if(!ats.length){box.innerHTML='<p class="empty">Nenhuma atividade ativa no momento.</p>';return;}
+    if(!ats.length){box.innerHTML='<p class="empty">Nenhuma atividade ativa no momento. 🎈</p>';return;}
     const best={}; minhas.forEach(r=>{if(best[r.atividade_id]==null||r.nota>best[r.atividade_id])best[r.atividade_id]=r.nota;});
     box.innerHTML="";
     ats.forEach(a=>{
+      const jogo=a.tipo==="memoria";
       const feita=best[a.id]!=null;
-      const meta=(a.vale_nota?`Vale ${fmt(a.valor)} pts`:"Treino")+(a.tipo==="memoria"?" · Jogo":"");
-      const right=feita?`<span class="tag done">Nota ${fmt(best[a.id])} ✓</span>`:`<span class="tag on">Fazer ›</span>`;
-      const d=document.createElement("div");d.className="tile";
-      d.innerHTML=`<div class="t-main"><div class="t-title">${esc(a.titulo)}</div><div class="t-meta">${meta}</div></div>${right}`;
+      const meta=a.vale_nota?`Vale ${fmt(a.valor)} pontos`:(jogo?"Jogo · sem nota":"Treino · sem nota");
+      const right=feita?(a.vale_nota?`<span class="tag done">Nota ${fmt(best[a.id])} ✓</span>`:`<span class="tag done">Feito ✓</span>`):`<span class="tag go">Fazer ›</span>`;
+      const d=document.createElement("div");d.className="atile";
+      d.innerHTML=`<span class="ico" style="background:${jogo?'linear-gradient(135deg,#ec4899,#f97316)':'linear-gradient(135deg,#7b2ff7,#2575fc)'}">${jogo?"🎮":"📝"}</span>
+        <div class="a-main"><div class="a-title">${esc(a.titulo)}</div><div class="a-meta">${meta}</div></div>${right}`;
       d.onclick=()=>runner(a,turma,nome);box.appendChild(d);});
   }catch(e){erro(e);}
 }
 function runner(a,turma,nome){ if(a.tipo==="quiz")return quizRun(a,turma,nome); if(a.tipo==="memoria")return memoriaRun(a,turma,nome);
-  app.innerHTML=`<div class="card">${SCHOOL}<p class="empty">Tipo de atividade não suportado.</p>
-    <button class="btn mt" id="v">Voltar</button></div>`; document.getElementById("v").onclick=()=>alunoAtividades(turma,nome); }
+  app.innerHTML=`<div class="card">${SCHOOL}<p class="empty">Tipo de atividade não suportado.</p><button class="btn mt" id="v">Voltar</button></div>`;
+  document.getElementById("v").onclick=()=>alunoAtividades(turma,nome); }
 
 /* ---------- QUIZ ---------- */
 function quizRun(a,turma,nome){
@@ -217,7 +231,7 @@ function quizRun(a,turma,nome){
       <div class="qtext">${esc(q.enunciado)}</div>${q.frase?`<div class="qphrase">${esc(q.frase)}</div>`:""}
       <div id="opts">${opts}</div><div id="w" class="warn hidden">Selecione uma alternativa.</div>
       <div class="row mt">${cur>0?'<button class="btn ghost" id="prev">Voltar</button>':""}
-        <button class="btn" id="next">${cur===qs.length-1?"Finalizar":"Próxima"}</button></div></div>`;
+        <button class="btn" id="next">${cur===qs.length-1?"Finalizar ✓":"Próxima →"}</button></div></div>`;
     document.querySelectorAll(".opt").forEach(el=>el.onclick=()=>{ans[cur]=+el.dataset.i;render();});
     const pv=document.getElementById("prev"); if(pv)pv.onclick=()=>{cur--;render();};
     document.getElementById("next").onclick=()=>{if(ans[cur]==null){document.getElementById("w").classList.remove("hidden");return;}
@@ -225,9 +239,9 @@ function quizRun(a,turma,nome){
   }
   async function finish(){
     let hits=0; qs.forEach((q,i)=>{const c=q.tipo==="vf"?(q.correta?0:1):q.correta; if(ans[i]===c)hits++;});
-    const nota=a.vale_nota?Math.round(a.valor*hits/qs.length*10)/10:a.valor;
+    const nota=a.vale_nota?Math.round(a.valor*hits/qs.length*10)/10:0;
     try{await dbSalvarResposta({atividade_id:a.id,turma_id:turma.id,aluno_nome:nome,nota,acertos:hits,total:qs.length,detalhes:{respostas:ans}});}catch(e){}
-    quizResult(a,turma,nome,qs,ans,hits,a.vale_nota?nota:0);
+    quizResult(a,turma,nome,qs,ans,hits,nota);
   }
   render();
 }
@@ -244,7 +258,7 @@ function quizResult(a,turma,nome,qs,ans,hits,nota){
   const ag=new Date();
   app.innerHTML=`<div class="card">${SCHOOL}<div class="center">
       ${a.vale_nota?`<div class="score-big">${fmt(nota)}<span class="score-of"> / ${fmt(a.valor)}</span></div>`:`<div class="score-big">${hits}<span class="score-of"> / ${qs.length}</span></div>`}
-      <div class="pill" style="background:${aprov?'var(--ok-soft)':'var(--no-soft)'};color:${aprov?'var(--ok)':'var(--no)'}">${a.vale_nota?(aprov?"Bom resultado!":"Revise o conteúdo"):"Treino concluído"}</div></div>
+      <div class="pill" style="background:${aprov?'var(--ok-soft)':'var(--no-soft)'};color:${aprov?'var(--ok)':'var(--no)'}">${a.vale_nota?(aprov?"Muito bem! 🎉":"Revise o conteúdo"):"Concluído! 🎉"}</div></div>
     <p class="sub center mt"><b>${esc(nome)}</b> · ${esc(turma.nome)}<br>Acertos: <b>${hits}</b> de ${qs.length}<br>
       <span style="font-size:.8rem">Concluído em ${ag.toLocaleDateString("pt-BR")} às ${ag.toLocaleTimeString("pt-BR",{hour:"2-digit",minute:"2-digit"})}</span></p>
     <div class="info">✅ Sua nota foi salva automaticamente para o professor.</div>
@@ -262,7 +276,7 @@ function memoriaRun(a,turma,nome){
   function render(){
     app.innerHTML=`<div class="card">${SCHOOL}
       <div class="topbar"><span>Pares: <b>${matched}</b>/${pares.length}</span><span>Jogadas: <b>${moves}</b></span></div>
-      <div class="eyebrow">${esc(a.titulo)}</div><p class="sub">Encontre os pares que combinam.</p>
+      <div class="eyebrow">🎮 ${esc(a.titulo)}</div><p class="sub">Encontre os pares que combinam.</p>
       <div class="mem-grid" id="grid"></div><button class="btn ghost mt" id="sair">Sair</button></div>`;
     const g=document.getElementById("grid");
     cards.forEach((c,idx)=>{const up=flipped.includes(idx)||c.done;const el=document.createElement("div");
@@ -276,8 +290,8 @@ function memoriaRun(a,turma,nome){
         if(matched===pares.length)setTimeout(finish,400);}
       else setTimeout(()=>{flipped=[];lock=false;render();},700);}}
   async function finish(){
-    const seg=Math.round((Date.now()-start)/1000); const nota=a.valor;
-    try{await dbSalvarResposta({atividade_id:a.id,turma_id:turma.id,aluno_nome:nome,nota:a.vale_nota?nota:0,acertos:pares.length,total:pares.length,detalhes:{jogadas:moves,segundos:seg}});}catch(e){}
+    const seg=Math.round((Date.now()-start)/1000);
+    try{await dbSalvarResposta({atividade_id:a.id,turma_id:turma.id,aluno_nome:nome,nota:a.vale_nota?a.valor:0,acertos:pares.length,total:pares.length,detalhes:{jogadas:moves,segundos:seg}});}catch(e){}
     app.innerHTML=`<div class="card">${SCHOOL}<div class="center"><div class="score-big">🎉</div>
       <div class="pill" style="background:var(--ok-soft);color:var(--ok)">Você completou o jogo!</div></div>
       <p class="sub center mt"><b>${esc(nome)}</b> · ${esc(turma.nome)}<br>Jogadas: <b>${moves}</b> · Tempo: <b>${seg}s</b></p>
@@ -291,33 +305,28 @@ function memoriaRun(a,turma,nome){
 /* ================= PROFESSOR ================= */
 function profLogin(){
   app.innerHTML=`<div class="card">${SCHOOL}<button class="back" onclick="signOutHome()">‹ Início</button>
-    <div class="eyebrow">Área restrita</div><h2>Acesso do professor</h2>
+    <div class="eyebrow">Área restrita 🔒</div><h2>Acesso do professor</h2>
     <label for="em">E-mail</label><input type="text" id="em" placeholder="${esc(TEACHER_EMAIL)}" autocomplete="username">
     <label for="pw">Senha</label><input type="password" id="pw" placeholder="Sua senha" autocomplete="current-password">
     <div id="w" class="warn hidden"></div>
     <button class="btn mt" id="go">Entrar</button>
     <button class="btn ghost mt-s" id="novo">Primeiro acesso? Criar minha conta</button>
     <p class="hint">Só o e-mail autorizado tem poderes de professor. O servidor recusa qualquer outro acesso.</p></div>`;
-  const w=document.getElementById("w");
-  const showErr=m=>{w.textContent=m;w.classList.remove("hidden");};
-  document.getElementById("go").onclick=async()=>{
-    w.classList.add("hidden");
+  const w=document.getElementById("w"); const showErr=m=>{w.textContent=m;w.classList.remove("hidden");};
+  document.getElementById("go").onclick=async()=>{ w.classList.add("hidden");
     const em=norm(document.getElementById("em").value), pw=document.getElementById("pw").value;
     try{ if(auth.currentUser&&auth.currentUser.isAnonymous)await auth.signOut();
       await auth.signInWithEmailAndPassword(em,pw);
       if(!isTeacher()){await auth.signOut();showErr("Esta conta não tem permissão de professor.");return;}
       profTurmas();
-    }catch(e){ showErr("E-mail ou senha incorretos."); }
-  };
-  document.getElementById("novo").onclick=async()=>{
-    w.classList.add("hidden");
+    }catch(e){ showErr("E-mail ou senha incorretos."); } };
+  document.getElementById("novo").onclick=async()=>{ w.classList.add("hidden");
     const em=norm(document.getElementById("em").value), pw=document.getElementById("pw").value;
     if(em.toLowerCase()!==TEACHER_EMAIL.toLowerCase()){showErr("Só é possível criar conta com o e-mail autorizado.");return;}
     if(pw.length<6){showErr("Crie uma senha com pelo menos 6 caracteres.");return;}
     try{ if(auth.currentUser&&auth.currentUser.isAnonymous)await auth.signOut();
       await auth.createUserWithEmailAndPassword(em,pw); profTurmas();
-    }catch(e){ showErr(e.code==="auth/email-already-in-use"?"Conta já existe — use Entrar.":"Não foi possível criar a conta."); }
-  };
+    }catch(e){ showErr(e.code==="auth/email-already-in-use"?"Conta já existe — use Entrar.":"Não foi possível criar a conta."); } };
 }
 async function signOutHome(){ try{if(auth.currentUser)await auth.signOut();}catch(e){} home(); }
 
@@ -334,8 +343,8 @@ async function profTurmas(){
   try{const t=await dbTurmas();const box=document.getElementById("lista");
     if(!t.length){box.innerHTML='<p class="empty">Nenhuma turma criada ainda.</p>';return;}
     box.innerHTML="";
-    t.forEach(tu=>{const d=document.createElement("div");d.className="tile";
-      d.innerHTML=`<div class="t-main"><div class="t-title">${esc(tu.nome)}</div></div><span class="tag on">Abrir ›</span>`;
+    t.forEach((tu,i)=>{const d=document.createElement("div");d.className="ctile";d.style.background=grad(CORES[i%CORES.length]);
+      d.innerHTML=`<span class="ct-title">${esc(tu.nome)}</span><span class="ct-arrow">›</span>`;
       d.onclick=()=>profTurma(tu);box.appendChild(d);});
   }catch(e){erro(e);}
 }
@@ -343,9 +352,14 @@ async function profTurma(turma,aba){
   if(!isTeacher())return profLogin(); aba=aba||"atividades";
   app.innerHTML=`<div class="card">${SCHOOL}<button class="back" onclick="profTurmas()">‹ Turmas</button>
     <h2>${esc(turma.nome)}</h2>
-    <div class="tabs"><button id="ta" class="${aba==="atividades"?"active":""}">Atividades</button>
+    <div class="row mt-s"><button class="btn ghost sm" id="ren">✏️ Renomear</button><button class="btn danger sm" id="delt">🗑 Excluir turma</button></div>
+    <div class="tabs" style="margin-top:16px"><button id="ta" class="${aba==="atividades"?"active":""}">Atividades</button>
       <button id="tn" class="${aba==="notas"?"active":""}">Notas</button></div>
     <div id="conteudo"><p class="empty">Carregando…</p></div></div>`;
+  document.getElementById("ren").onclick=async()=>{const nv=prompt("Novo nome da turma:",turma.nome);
+    if(nv&&norm(nv)){try{await dbRenomearTurma(turma.id,norm(nv));turma.nome=norm(nv);profTurma(turma,aba);}catch(e){erro(e);}}};
+  document.getElementById("delt").onclick=async()=>{if(confirm("Excluir a turma \""+turma.nome+"\" e TODAS as suas atividades e notas? Não dá para desfazer.")){
+    try{await dbApagarTurmaFull(turma.id);profTurmas();}catch(e){erro(e);}}};
   document.getElementById("ta").onclick=()=>profTurma(turma,"atividades");
   document.getElementById("tn").onclick=()=>profTurma(turma,"notas");
   if(aba==="atividades")abaAtividades(turma); else abaNotas(turma);
@@ -357,48 +371,62 @@ async function abaAtividades(turma){
     const ats=await dbAtividades(turma.id,false);
     let html=`<div class="info">🔗 Link desta turma para os alunos:<div class="linkbox">${esc(link)}</div>
       <button class="btn soft sm mt-s" style="width:auto" id="cp">Copiar link</button></div>`;
-    if(!ats.length)html+='<p class="empty">Nenhuma atividade ainda. Crie a primeira abaixo.</p>';
+    if(!ats.length)html+='<p class="empty">Nenhuma atividade ainda. Adicione abaixo.</p>';
     else{html+='<div class="mt">';ats.forEach(a=>{
-      html+=`<div class="tile" style="cursor:default"><div class="t-main"><div class="t-title">${esc(a.titulo)}</div>
-        <div class="t-meta">${a.tipo==="memoria"?"Jogo":"Quiz"} · ${a.vale_nota?"Vale "+fmt(a.valor)+" pts":"Treino"}</div></div>
+      html+=`<div class="row-item"><div class="ri-main"><div class="ri-title">${a.tipo==="memoria"?"🎮":"📝"} ${esc(a.titulo)}</div>
+        <div class="ri-meta">${a.vale_nota?"Vale "+fmt(a.valor)+" pts":"Sem nota"}</div></div>
         <div class="row" style="flex:none;width:auto">
           <button class="btn sm ${a.ativo?'soft':'ghost'}" data-act="toggle" data-id="${a.id}" data-on="${a.ativo}">${a.ativo?"Ativa":"Inativa"}</button>
           <button class="btn sm danger" data-act="del" data-id="${a.id}">Excluir</button></div></div>`;});
       html+='</div>';}
-    html+=`<h2 class="mt">Criar atividade</h2>
-      <label>1. Cole o código da atividade (as questões que recebeu)</label>
-      <textarea id="json" placeholder='{ "tipo":"quiz", "conteudo": { ... } }'></textarea>
-      <label>2. Título</label><input type="text" id="f-tit" placeholder="Ex.: Preposição e Regência">
-      <label>3. Pontuação (quanto vale esta atividade)</label><input type="number" id="f-val" step="0.5" min="0" value="5">
-      <label>4. Tipo de nota</label>
-      <select id="f-vn"><option value="1">Vale nota</option><option value="0">Treino (não entra na nota)</option></select>
+    html+=`<h2 class="mt">Adicionar atividade</h2>
+      <p class="sub">Escolha o arquivo da atividade (.json) que recebeu. O título vem do próprio arquivo.</p>
+      <label class="filebtn" for="file">📁 Escolher arquivo da atividade</label>
+      <input type="file" id="file" accept=".json,application/json" class="hidden">
+      <div id="preview" class="hidden info"></div>
+      <label class="mt">Pontuação</label>
+      <div class="row" style="align-items:center">
+        <input type="number" id="f-val" step="0.5" min="0" value="5" style="flex:1">
+        <label class="check"><input type="checkbox" id="f-sem"> Sem pontuação</label>
+      </div>
       <div id="iw" class="warn hidden"></div>
-      <button class="btn mt-s" id="imp">Criar atividade nesta turma</button>`;
+      <button class="btn mt-s" id="imp" disabled>Adicionar atividade</button>`;
     c.innerHTML=html;
     document.getElementById("cp").onclick=()=>{navigator.clipboard?.writeText(link);document.getElementById("cp").textContent="Copiado!";};
     c.querySelectorAll("[data-act]").forEach(b=>b.onclick=async()=>{try{
       if(b.dataset.act==="del"){if(confirm("Excluir esta atividade?")){await dbApagarAtividade(b.dataset.id);abaAtividades(turma);}}
       else{await dbToggle(b.dataset.id,b.dataset.on!=="true");abaAtividades(turma);}
     }catch(e){erro(e);}});
-    // pré-preenche título/valor a partir do JSON
-    document.getElementById("json").addEventListener("input",function(){
-      try{const o=JSON.parse(this.value);
-        if(o.titulo&&!document.getElementById("f-tit").value)document.getElementById("f-tit").value=o.titulo;
-        if(o.valor!=null)document.getElementById("f-val").value=o.valor;
-        if(o.vale_nota===false)document.getElementById("f-vn").value="0";
-      }catch(e){}
+
+    let loaded=null,loadedName="";
+    const prev=document.getElementById("preview"), imp=document.getElementById("imp"), iw=document.getElementById("iw");
+    const fval=document.getElementById("f-val"), fsem=document.getElementById("f-sem");
+    fsem.addEventListener("change",()=>{ fval.disabled=fsem.checked; });
+    document.getElementById("file").addEventListener("change",e=>{
+      const f=e.target.files[0]; if(!f)return; loadedName=f.name.replace(/\.json$/i,"");
+      const r=new FileReader();
+      r.onload=()=>{ iw.classList.add("hidden");
+        try{ loaded=JSON.parse(r.result); }catch(err){ loaded=null; prev.classList.add("hidden"); imp.disabled=true;
+          iw.textContent="Arquivo inválido. Use o arquivo .json da atividade."; iw.classList.remove("hidden"); return; }
+        if(!loaded.tipo||!loaded.conteudo){ loaded=null; imp.disabled=true;
+          iw.textContent="O arquivo não parece ser uma atividade válida."; iw.classList.remove("hidden"); return; }
+        const tit=loaded.titulo||loadedName;
+        const n=(loaded.conteudo.questoes&&loaded.conteudo.questoes.length)||(loaded.conteudo.pares&&loaded.conteudo.pares.length)||0;
+        const tipoTxt=loaded.tipo==="memoria"?"jogo da memória ("+n+" pares)":"quiz ("+n+" questões)";
+        prev.innerHTML=`✅ <b>${esc(tit)}</b><br>${tipoTxt}`; prev.classList.remove("hidden");
+        if(loaded.valor!=null)fval.value=loaded.valor;
+        if(loaded.vale_nota===false){fsem.checked=true;fval.disabled=true;}
+        imp.disabled=false;
+      };
+      r.readAsText(f);
     });
-    document.getElementById("imp").onclick=async()=>{
-      const w=document.getElementById("iw");w.classList.add("hidden");
-      let o;try{o=JSON.parse(document.getElementById("json").value);}catch(e){w.textContent="Código inválido. Confira se colou o JSON completo.";w.classList.remove("hidden");return;}
-      const tit=norm(document.getElementById("f-tit").value);
-      const val=parseFloat(document.getElementById("f-val").value);
-      const vn=document.getElementById("f-vn").value==="1";
-      if(!tit){w.textContent="Dê um título à atividade.";w.classList.remove("hidden");return;}
-      if(isNaN(val)){w.textContent="Informe a pontuação.";w.classList.remove("hidden");return;}
-      if(!o.tipo||!o.conteudo){w.textContent="O código precisa conter tipo e conteudo.";w.classList.remove("hidden");return;}
-      try{await dbCriarAtividade({turma_id:turma.id,titulo:tit,tipo:o.tipo,valor:val,vale_nota:vn,conteudo:o.conteudo,ativo:true});abaAtividades(turma);}
-      catch(e){erro(e);}
+    imp.onclick=async()=>{ iw.classList.add("hidden");
+      if(!loaded){iw.textContent="Escolha primeiro o arquivo da atividade.";iw.classList.remove("hidden");return;}
+      const sem=fsem.checked; const valor=sem?0:parseFloat(fval.value);
+      if(!sem&&isNaN(valor)){iw.textContent="Informe a pontuação ou marque \"Sem pontuação\".";iw.classList.remove("hidden");return;}
+      const titulo=norm(loaded.titulo||loadedName)||"Atividade";
+      try{ await dbCriarAtividade({turma_id:turma.id,titulo,tipo:loaded.tipo,valor,vale_nota:!sem,conteudo:loaded.conteudo,ativo:true}); abaAtividades(turma); }
+      catch(e){ erro(e); }
     };
   }catch(e){erro(e);}
 }
