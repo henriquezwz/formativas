@@ -82,6 +82,14 @@
   .hidden{display:none;} .center{text-align:center;}
   .check{display:flex;align-items:center;gap:8px;margin:0;white-space:nowrap;font-weight:700;} .check input{width:auto;}
   @media(max-width:480px){.mem-grid{grid-template-columns:repeat(3,1fr);}}
+  .grid-turmas{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:12px;}
+  .grid-turmas .ctile{margin-bottom:0;}
+  .sug{margin-top:6px;border-radius:12px;overflow:hidden;}
+  .sug:not(:empty){border:1px solid var(--line);}
+  .sugitem{padding:11px 14px;border-bottom:1px solid var(--line);cursor:pointer;font-weight:600;background:#fff;}
+  .sugitem:last-child{border-bottom:none;} .sugitem:hover{background:var(--brand-soft);}
+  .scroll{max-height:74vh;}
+  td.g[data-k]:hover{filter:brightness(.94);}
 </style>
 </head>
 <body>
@@ -109,6 +117,8 @@ const SCHOOL='<div class="banner"><strong>SESI · Prof. Paulo Henrique</strong><
 const isTeacher=()=>auth.currentUser&&auth.currentUser.email&&auth.currentUser.email.toLowerCase()===TEACHER_EMAIL.toLowerCase();
 const grad=(c)=>`linear-gradient(135deg,${c[0]},${c[1]})`;
 function shuffle(arr){ for(let i=arr.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[arr[i],arr[j]]=[arr[j],arr[i]];} return arr; }
+function setWide(w){ app.style.maxWidth=w; }
+const deburr=s=>(s||"").normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase().trim().replace(/\s+/g," ");
 
 function boot(){
   if(JSON.stringify(firebaseConfig).includes("COLE_AQUI")||TEACHER_EMAIL.includes("seu-email")){
@@ -128,6 +138,8 @@ async function dbTurma(id){ const d=await db.collection("turmas").doc(id).get();
 async function dbCriarTurma(nome){ await db.collection("turmas").add({nome,alunos:[],created_at:new Date().toISOString()}); }
 async function dbRenomearTurma(id,nome){ await db.collection("turmas").doc(id).update({nome}); }
 async function dbSalvarAlunos(id,alunos){ await db.collection("turmas").doc(id).update({alunos}); }
+async function dbSalvarAdaptados(id,adaptados){ await db.collection("turmas").doc(id).update({adaptados}); }
+async function dbSalvarLiberacoes(id,liberacoes){ await db.collection("turmas").doc(id).update({liberacoes}); }
 async function dbApagarTurmaFull(id){
   const a=await db.collection("atividades").where("turma_id","==",id).get(); for(const doc of a.docs) await doc.ref.delete();
   const r=await db.collection("respostas").where("turma_id","==",id).get(); for(const doc of r.docs) await doc.ref.delete();
@@ -145,7 +157,7 @@ const byCreated=(x,y)=>(x.created_at||"").localeCompare(y.created_at||"");
 
 /* ---------- HOME ---------- */
 function home(){
-  location.hash="";
+  setWide("760px"); location.hash="";
   app.innerHTML=`<div class="card">${SCHOOL}<div class="eyebrow">Bem-vindo 👋</div>
     <h1>Vamos aprender!</h1><p class="sub">Escolha como deseja entrar.</p>
     <button class="btn" id="ba">🎒 Sou aluno(a)</button>
@@ -156,7 +168,7 @@ function home(){
 
 /* ================= ALUNO ================= */
 async function alunoEntrada(turmaFixa){
-  let turmas=[];
+  setWide("760px"); let turmas=[];
   if(!turmaFixa){ try{ await ensureStudentAuth(); turmas=await dbTurmas(); }catch(e){ return erro(e); } }
   app.innerHTML=`<div class="card">${SCHOOL}<button class="back" onclick="home()">‹ Início</button>
     <div class="eyebrow">Entrar</div><h2>Vamos começar 🎒</h2>
@@ -172,19 +184,30 @@ async function alunoEntrada(turmaFixa){
     document.getElementById("sel").addEventListener("change",function(){ turmaAtual=turmas.find(t=>t.id===this.value)||null; renderName(); });
   }
   function renderName(){
-    const na=document.getElementById("na");
+    const na=document.getElementById("na"); window.__chosen=null;
     if(!turmaAtual){ na.innerHTML=""; return; }
     const roster=turmaAtual.alunos||[];
-    if(roster.length) na.innerHTML=`<label for="selnome">Selecione o seu nome</label><select id="selnome"><option value="">— escolha o seu nome —</option>${roster.map(n=>`<option value="${esc(n)}">${esc(n)}</option>`).join("")}</select>`;
-    else na.innerHTML=`<label for="nm">Seu nome completo</label><input type="text" id="nm" placeholder="Digite seu nome" autocomplete="off">`;
+    if(roster.length){
+      na.innerHTML=`<label for="nm">Seu nome</label><input type="text" id="nm" placeholder="Comece a digitar seu nome…" autocomplete="off"><div id="sug" class="sug"></div>`;
+      const inp=document.getElementById("nm"), sug=document.getElementById("sug");
+      inp.addEventListener("input",()=>{ window.__chosen=null; const q=deburr(inp.value);
+        if(q.length<2){ sug.innerHTML=""; return; }
+        const ms=roster.filter(n=>deburr(n).includes(q)).slice(0,8);
+        sug.innerHTML=ms.length?ms.map(n=>`<div class="sugitem" data-n="${esc(n)}">${esc(n)}</div>`).join(""):'<div class="sugitem" style="color:var(--ink-soft);cursor:default">Nenhum nome encontrado</div>';
+        sug.querySelectorAll(".sugitem[data-n]").forEach(el=>el.onclick=()=>{ inp.value=el.dataset.n; window.__chosen=el.dataset.n; sug.innerHTML=""; });
+      });
+    } else { na.innerHTML=`<label for="nm">Seu nome completo</label><input type="text" id="nm" placeholder="Digite seu nome" autocomplete="off">`; }
   }
   renderName();
   document.getElementById("go").onclick=()=>{
     wEl.classList.add("hidden");
     if(!turmaAtual){ warn("Escolha sua turma no menu."); return; }
-    const roster=turmaAtual.alunos||[]; let nome;
-    if(roster.length){ const s=document.getElementById("selnome"); nome=s&&s.value; if(!nome){warn("Selecione o seu nome na lista.");return;} confirmar(turmaAtual,nome,turmaFixa); }
-    else{ const inp=document.getElementById("nm"); nome=norm(inp&&inp.value); if(!nome){warn("Digite seu nome.");return;} alunoAtividades(turmaAtual,nome); }
+    const roster=turmaAtual.alunos||[];
+    if(roster.length){ const inp=document.getElementById("nm"); let ch=window.__chosen;
+      if(!ch){ const ex=roster.find(n=>deburr(n)===deburr(inp&&inp.value)); if(ex)ch=ex; }
+      if(!ch){ warn("Digite e toque no seu nome na lista que aparecer."); return; }
+      confirmar(turmaAtual,ch,turmaFixa); }
+    else{ const inp=document.getElementById("nm"); const nome=norm(inp&&inp.value); if(!nome){warn("Digite seu nome.");return;} alunoAtividades(turmaAtual,nome); }
   };
 }
 async function alunoEntrarTurma(id){ try{ await ensureStudentAuth(); const t=await dbTurma(id); alunoEntrada(t); }catch(e){ home(); } }
@@ -200,31 +223,67 @@ function confirmar(turma,nome,turmaFixa){
 }
 
 async function alunoAtividades(turma,nome){
-  app.innerHTML=`<div class="card">${SCHOOL}<button class="back" onclick="home()">‹ Sair</button>
+  setWide("760px"); app.innerHTML=`<div class="card">${SCHOOL}<button class="back" onclick="home()">‹ Sair</button>
     <div class="eyebrow">${esc(turma.nome)} · ${esc(nome.split(" ")[0])}</div>
     <h2>Suas atividades</h2><div id="lista"><p class="empty">Carregando…</p></div></div>`;
   try{
     const [ats0,minhas]=await Promise.all([dbAtividades(turma.id,true),dbMinhasRespostas(turma.id)]);
-    const ats=ats0.sort(byCreated).reverse(); const box=document.getElementById("lista");
+    const adaptado=(turma.adaptados||[]).map(deburr).includes(deburr(nome));
+    const visivel=a=>{const p=a.publico||"todos"; return p==="todos"||(p==="adaptados"&&adaptado)||(p==="regulares"&&!adaptado);};
+    const ats=ats0.filter(visivel).sort(byCreated).reverse(); const box=document.getElementById("lista");
     if(!ats.length){box.innerHTML='<p class="empty">Nenhuma atividade ativa no momento. 🎈</p>';return;}
-    const best={}; minhas.forEach(r=>{if(best[r.atividade_id]==null||r.nota>best[r.atividade_id])best[r.atividade_id]=r.nota;});
+    const best={},last={}; minhas.forEach(r=>{ if(best[r.atividade_id]==null||r.nota>best[r.atividade_id])best[r.atividade_id]=r.nota;
+      const t=r.created_at||""; if(!last[r.atividade_id]||t>last[r.atividade_id])last[r.atividade_id]=t; });
+    const lib=turma.liberacoes||{};
     box.innerHTML="";
     ats.forEach(a=>{
-      const jogo=a.tipo==="memoria"; const feita=best[a.id]!=null;
+      const jogo=a.tipo==="memoria"; const done=best[a.id]!=null;
+      const rel=lib[deburr(nome)+"||"+a.id]; const released=!!rel&&(!last[a.id]||rel>last[a.id]); const locked=done&&!released;
       const meta=a.vale_nota?`Vale ${fmt(a.valor)} pontos`:(jogo?"Jogo · sem nota":"Treino · sem nota");
-      const right=feita?(a.vale_nota?`<span class="tag done">Nota ${fmt(best[a.id])} ✓</span>`:`<span class="tag done">Feito ✓</span>`):`<span class="tag go">Fazer ›</span>`;
+      let right;
+      if(locked) right=`<span class="tag done">${a.vale_nota?"Nota "+fmt(best[a.id]):"Feito"} 🔒</span>`;
+      else if(released) right=`<span class="tag go">Refazer ↻</span>`;
+      else right=`<span class="tag go">Fazer ›</span>`;
       const d=document.createElement("div");d.className="atile";
+      if(locked){d.style.cursor="default";d.style.opacity=".7";}
       d.innerHTML=`<span class="ico" style="background:${jogo?'linear-gradient(135deg,#ec4899,#f97316)':'linear-gradient(135deg,#7b2ff7,#2575fc)'}">${jogo?"🎮":"📝"}</span>
-        <div class="a-main"><div class="a-title">${esc(a.titulo)}</div><div class="a-meta">${meta}</div></div>${right}`;
-      d.onclick=()=>runner(a,turma,nome);box.appendChild(d);});
+        <div class="a-main"><div class="a-title">${esc(a.titulo)}</div><div class="a-meta">${meta}${locked?" · já entregue":""}</div></div>${right}`;
+      if(!locked) d.onclick=()=>runner(a,turma,nome);
+      box.appendChild(d);});
   }catch(e){erro(e);}
 }
-function runner(a,turma,nome){ if(a.tipo==="quiz")return quizRun(a,turma,nome); if(a.tipo==="memoria")return memoriaRun(a,turma,nome);
+function runnerStart(a,turma,nome,partner){ if(a.tipo==="quiz")return quizRun(a,turma,nome,partner); if(a.tipo==="memoria")return memoriaRun(a,turma,nome,partner);
   app.innerHTML=`<div class="card">${SCHOOL}<p class="empty">Tipo de atividade não suportado.</p><button class="btn mt" id="v">Voltar</button></div>`;
   document.getElementById("v").onclick=()=>alunoAtividades(turma,nome); }
+function runner(a,turma,nome){ if(a.dupla) return duplaSelect(a,turma,nome); return runnerStart(a,turma,nome,null); }
+function duplaSelect(a,turma,nome){
+  setWide("760px");
+  const roster=(turma.alunos||[]).filter(n=>deburr(n)!==deburr(nome)); window.__partner=null;
+  app.innerHTML=`<div class="card">${SCHOOL}<button class="back" onclick="home()">‹ Sair</button>
+    <div class="eyebrow">${esc(a.titulo)}</div><h2>Como você vai fazer? 👥</h2>
+    <p class="sub">Esta atividade pode ser feita sozinho(a) ou em dupla. Na dupla, a mesma nota vai para os dois.</p>
+    <button class="btn" id="solo">Fazer sozinho(a)</button>
+    <div style="text-align:center;color:var(--ink-soft);margin:14px 0;font-weight:700">— ou em dupla —</div>
+    <label for="pn">Nome do(a) colega</label><input type="text" id="pn" placeholder="Comece a digitar o nome do colega…" autocomplete="off"><div id="psug" class="sug"></div>
+    <div id="w" class="warn hidden"></div>
+    <button class="btn amber mt" id="dupla">Fazer em dupla →</button></div>`;
+  const inp=document.getElementById("pn"), sug=document.getElementById("psug");
+  inp.addEventListener("input",()=>{ window.__partner=null; const q=deburr(inp.value);
+    if(q.length<2){sug.innerHTML="";return;}
+    const ms=roster.filter(n=>deburr(n).includes(q)).slice(0,8);
+    sug.innerHTML=ms.length?ms.map(n=>`<div class="sugitem" data-n="${esc(n)}">${esc(n)}</div>`).join(""):'<div class="sugitem" style="color:var(--ink-soft);cursor:default">Nenhum nome encontrado</div>';
+    sug.querySelectorAll(".sugitem[data-n]").forEach(el=>el.onclick=()=>{ inp.value=el.dataset.n; window.__partner=el.dataset.n; sug.innerHTML=""; });
+  });
+  document.getElementById("solo").onclick=()=>runnerStart(a,turma,nome,null);
+  document.getElementById("dupla").onclick=()=>{ let p=window.__partner;
+    if(!p){ const ex=roster.find(n=>deburr(n)===deburr(inp.value)); if(ex)p=ex; }
+    if(!p){ const w=document.getElementById("w"); w.textContent="Digite e toque no nome do(a) colega na lista."; w.classList.remove("hidden"); return; }
+    runnerStart(a,turma,nome,p);
+  };
+}
 
 /* ---------- QUIZ (alternativas embaralhadas por aluno) ---------- */
-function quizRun(a,turma,nome){
+function quizRun(a,turma,nome,partner){
   const qs=(a.conteudo&&a.conteudo.questoes)||[]; let cur=0; const ans=new Array(qs.length).fill(null);
   const base=qs.map(q=>{ let opts,corr;
     if(q.tipo==="vf"){opts=["Verdadeiro","Falso"];corr=q.correta?0:1;} else {opts=q.alternativas.slice();corr=q.correta;}
@@ -247,12 +306,13 @@ function quizRun(a,turma,nome){
   async function finish(){
     let hits=0; qs.forEach((q,i)=>{const b=base[i]; if(ans[i]!=null&&b.order[ans[i]]===b.corr)hits++;});
     const nota=a.vale_nota?Math.round(a.valor*hits/qs.length*10)/10:0;
-    try{await dbSalvarResposta({atividade_id:a.id,turma_id:turma.id,aluno_nome:nome,nota,acertos:hits,total:qs.length,detalhes:{}});}catch(e){}
-    quizResult(a,turma,nome,qs,base,ans,hits,nota);
+    try{ await dbSalvarResposta({atividade_id:a.id,turma_id:turma.id,aluno_nome:nome,nota,acertos:hits,total:qs.length,detalhes:partner?{dupla_com:partner}:{}});
+      if(partner) await dbSalvarResposta({atividade_id:a.id,turma_id:turma.id,aluno_nome:partner,nota,acertos:hits,total:qs.length,detalhes:{dupla_com:nome}}); }catch(e){}
+    quizResult(a,turma,nome,qs,base,ans,hits,nota,partner);
   }
   render();
 }
-function quizResult(a,turma,nome,qs,base,ans,hits,nota){
+function quizResult(a,turma,nome,qs,base,ans,hits,nota,partner){
   const aprov=a.vale_nota?(nota>=a.valor*0.6):true;
   const review=qs.map((q,i)=>{const b=base[i]; const ok=ans[i]!=null&&b.order[ans[i]]===b.corr;
     const sua=ans[i]==null?"—":b.opts[b.order[ans[i]]]; const corr=b.opts[b.corr];
@@ -267,14 +327,14 @@ function quizResult(a,turma,nome,qs,base,ans,hits,nota){
       <div class="pill" style="background:${aprov?'var(--ok-soft)':'var(--no-soft)'};color:${aprov?'var(--ok)':'var(--no)'}">${a.vale_nota?(aprov?"Muito bem! 🎉":"Revise o conteúdo"):"Concluído! 🎉"}</div></div>
     <p class="sub center mt"><b>${esc(nome)}</b> · ${esc(turma.nome)}<br>Acertos: <b>${hits}</b> de ${qs.length}<br>
       <span style="font-size:.8rem">Concluído em ${ag.toLocaleDateString("pt-BR")} às ${ag.toLocaleTimeString("pt-BR",{hour:"2-digit",minute:"2-digit"})}</span></p>
-    <div class="info">✅ Sua nota foi salva automaticamente para o professor.</div>
+    <div class="info">✅ Nota salva automaticamente${partner?" para você e para "+esc(partner):""}.</div>
     <h2 class="mt">Revisão comentada</h2>${review}
     <button class="btn amber mt" id="v">Voltar às atividades</button></div>`;
   document.getElementById("v").onclick=()=>alunoAtividades(turma,nome);
 }
 
 /* ---------- JOGO DA MEMÓRIA ---------- */
-function memoriaRun(a,turma,nome){
+function memoriaRun(a,turma,nome,partner){
   const pares=(a.conteudo&&a.conteudo.pares)||[];
   let cards=[]; pares.forEach((p,i)=>{cards.push({pid:i,txt:p.a});cards.push({pid:i,txt:p.b});}); shuffle(cards);
   let flipped=[],matched=0,moves=0,lock=false,start=Date.now();
@@ -294,11 +354,13 @@ function memoriaRun(a,turma,nome){
       else setTimeout(()=>{flipped=[];lock=false;render();},700);}}
   async function finish(){
     const seg=Math.round((Date.now()-start)/1000);
-    try{await dbSalvarResposta({atividade_id:a.id,turma_id:turma.id,aluno_nome:nome,nota:a.vale_nota?a.valor:0,acertos:pares.length,total:pares.length,detalhes:{jogadas:moves,segundos:seg}});}catch(e){}
+    const nt=a.vale_nota?a.valor:0; const det={jogadas:moves,segundos:seg};
+    try{ await dbSalvarResposta({atividade_id:a.id,turma_id:turma.id,aluno_nome:nome,nota:nt,acertos:pares.length,total:pares.length,detalhes:partner?Object.assign({dupla_com:partner},det):det});
+      if(partner) await dbSalvarResposta({atividade_id:a.id,turma_id:turma.id,aluno_nome:partner,nota:nt,acertos:pares.length,total:pares.length,detalhes:Object.assign({dupla_com:nome},det)}); }catch(e){}
     app.innerHTML=`<div class="card">${SCHOOL}<div class="center"><div class="score-big">🎉</div>
       <div class="pill" style="background:var(--ok-soft);color:var(--ok)">Você completou o jogo!</div></div>
       <p class="sub center mt"><b>${esc(nome)}</b> · ${esc(turma.nome)}<br>Jogadas: <b>${moves}</b> · Tempo: <b>${seg}s</b></p>
-      <div class="info">✅ Seu desempenho foi salvo para o professor.</div>
+      <div class="info">✅ Desempenho salvo${partner?" para você e para "+esc(partner):""}.</div>
       <button class="btn amber mt" id="v">Voltar às atividades</button></div>`;
     document.getElementById("v").onclick=()=>alunoAtividades(turma,nome);
   }
@@ -307,7 +369,7 @@ function memoriaRun(a,turma,nome){
 
 /* ================= PROFESSOR ================= */
 function profLogin(){
-  app.innerHTML=`<div class="card">${SCHOOL}<button class="back" onclick="signOutHome()">‹ Início</button>
+  setWide("760px"); app.innerHTML=`<div class="card">${SCHOOL}<button class="back" onclick="signOutHome()">‹ Início</button>
     <div class="eyebrow">Área restrita 🔒</div><h2>Acesso do professor</h2>
     <label for="em">E-mail</label><input type="text" id="em" placeholder="${esc(TEACHER_EMAIL)}" autocomplete="username">
     <label for="pw">Senha</label><input type="password" id="pw" placeholder="Sua senha" autocomplete="current-password">
@@ -333,9 +395,10 @@ async function signOutHome(){ try{if(auth.currentUser)await auth.signOut();}catc
 
 async function profTurmas(){
   if(!isTeacher())return profLogin();
+  setWide("1180px");
   app.innerHTML=`<div class="card">${SCHOOL}<button class="back" onclick="signOutHome()">‹ Sair (encerrar sessão)</button>
     <h2>Turmas</h2><p class="sub">Cada turma é uma pasta com lista de alunos, atividades e notas.</p>
-    <div id="lista"><p class="empty">Carregando…</p></div>
+    <div id="lista" class="grid-turmas"><p class="empty">Carregando…</p></div>
     <button class="btn amber" id="autoload" style="margin-bottom:14px">⚡ Carregar alunos de todas as turmas</button>
     <label class="mt">Criar nova turma</label>
     <div class="row"><input type="text" id="nova" placeholder="Ex.: 8º Ano A"><button class="btn sm" id="add" style="width:auto">Criar</button></div>
@@ -350,7 +413,7 @@ async function profTurmas(){
   }catch(e){erro(e);}
 }
 async function profTurma(turma,aba){
-  if(!isTeacher())return profLogin(); aba=aba||"notas";
+  if(!isTeacher())return profLogin(); aba=aba||"notas"; setWide("1180px");
   app.innerHTML=`<div class="card">${SCHOOL}<button class="back" onclick="profTurmas()">‹ Turmas</button>
     <h2>${esc(turma.nome)}</h2>
     <div class="row mt-s"><button class="btn ghost sm" id="ren">✏️ Renomear</button><button class="btn danger sm" id="delt">🗑 Excluir turma</button></div>
@@ -374,11 +437,18 @@ async function abaAlunos(turma){
   c.innerHTML=`<p class="sub">Cole a lista de nomes (um por linha). É nesta lista que o aluno vai escolher o nome dele.</p>
     <textarea id="ros" style="min-height:260px;font-family:inherit;font-size:.95rem">${esc(roster.join("\n"))}</textarea>
     <button class="btn mt-s" id="sv">Salvar lista de alunos</button>
-    <p class="hint">${roster.length} aluno(s) cadastrado(s) atualmente.</p>`;
+    <p class="hint">${roster.length} aluno(s) cadastrado(s).</p>
+    <h2 class="mt">Avaliação adaptada (PEI)</h2>
+    <p class="sub">Marque quem fará a versão adaptada. Esse aluno será redirecionado automaticamente para a atividade marcada como “Só adaptados”.</p>
+    ${roster.length?roster.map(n=>`<label class="check" style="margin:7px 0"><input type="checkbox" class="adp" value="${esc(n)}" ${(turma.adaptados||[]).map(deburr).includes(deburr(n))?"checked":""}> ${esc(n)}</label>`).join(""):'<p class="hint">Salve a lista de alunos primeiro.</p>'}
+    ${roster.length?'<button class="btn amber mt-s" id="svadp">Salvar adaptados</button>':''}`;
   document.getElementById("sv").onclick=async()=>{
     const arr=document.getElementById("ros").value.split("\n").map(x=>norm(x)).filter(Boolean);
     try{ await dbSalvarAlunos(turma.id,arr); turma.alunos=arr; profTurma(turma,"alunos"); }catch(e){erro(e);}
   };
+  const svadp=document.getElementById("svadp");
+  if(svadp) svadp.onclick=async()=>{ const arr=[...document.querySelectorAll(".adp:checked")].map(e=>e.value);
+    try{ await dbSalvarAdaptados(turma.id,arr); turma.adaptados=arr; profTurma(turma,"alunos"); }catch(e){erro(e);} };
 }
 
 async function abaAtividades(turma){
@@ -390,7 +460,7 @@ async function abaAtividades(turma){
     if(!ats.length)html+='<p class="empty">Nenhuma atividade ainda. Adicione abaixo.</p>';
     else{html+='<div class="mt">';ats.forEach(a=>{
       html+=`<div class="row-item"><div class="ri-main"><div class="ri-title">${a.tipo==="memoria"?"🎮":"📝"} ${esc(a.titulo)}</div>
-        <div class="ri-meta">${a.vale_nota?"Vale "+fmt(a.valor)+" pts":"Sem nota"}</div></div>
+        <div class="ri-meta">${a.vale_nota?"Vale "+fmt(a.valor)+" pts":"Sem nota"}${a.dupla?" · 👥 dupla":""}${a.publico==="adaptados"?" · ♿ adaptados":(a.publico==="regulares"?" · regulares":"")}</div></div>
         <div class="row" style="flex:none;width:auto">
           <button class="btn sm ${a.ativo?'soft':'ghost'}" data-act="toggle" data-id="${a.id}" data-on="${a.ativo}">${a.ativo?"Ativa":"Inativa"}</button>
           <button class="btn sm danger" data-act="del" data-id="${a.id}">Excluir</button></div></div>`;});
@@ -403,6 +473,9 @@ async function abaAtividades(turma){
       <label class="mt">Pontuação</label>
       <div class="row" style="align-items:center"><input type="number" id="f-val" step="0.5" min="0" value="5" style="flex:1">
         <label class="check"><input type="checkbox" id="f-sem"> Sem pontuação</label></div>
+      <label class="mt">Quem vê esta atividade?</label>
+      <select id="f-pub"><option value="todos">Todos os alunos</option><option value="regulares">Só alunos regulares</option><option value="adaptados">Só alunos adaptados (PEI)</option></select>
+      <label class="check mt"><input type="checkbox" id="f-dup"> Permitir fazer em dupla (a nota vai para os dois)</label>
       <div id="iw" class="warn hidden"></div>
       <button class="btn mt-s" id="imp" disabled>Adicionar atividade</button>`;
     c.innerHTML=html;
@@ -435,7 +508,8 @@ async function abaAtividades(turma){
       const sem=fsem.checked; const valor=sem?0:parseFloat(fval.value);
       if(!sem&&isNaN(valor)){iw.textContent="Informe a pontuação ou marque \"Sem pontuação\".";iw.classList.remove("hidden");return;}
       const titulo=norm(loaded.titulo||loadedName)||"Atividade";
-      try{ await dbCriarAtividade({turma_id:turma.id,titulo,tipo:loaded.tipo,valor,vale_nota:!sem,conteudo:loaded.conteudo,ativo:true}); abaAtividades(turma); }catch(e){ erro(e); }
+      const publico=document.getElementById("f-pub").value; const dupla=document.getElementById("f-dup").checked;
+      try{ await dbCriarAtividade({turma_id:turma.id,titulo,tipo:loaded.tipo,valor,vale_nota:!sem,publico,dupla,conteudo:loaded.conteudo,ativo:true}); abaAtividades(turma); }catch(e){ erro(e); }
     };
   }catch(e){erro(e);}
 }
@@ -445,25 +519,34 @@ async function abaNotas(turma){
   try{
     const [ats0,resp]=await Promise.all([dbAtividades(turma.id,false),dbRespostasTurma(turma.id)]);
     const cols=ats0.sort(byCreated); const roster=turma.alunos||[];
-    const best={}; resp.forEach(r=>{const k=norm(r.aluno_nome).toLowerCase()+"||"+r.atividade_id; if(best[k]==null||r.nota>best[k])best[k]=r.nota;});
+    const best={},last={}; resp.forEach(r=>{const k=deburr(r.aluno_nome)+"||"+r.atividade_id;
+      if(best[k]==null||r.nota>best[k])best[k]=r.nota; const t=r.created_at||""; if(!last[k]||t>last[k])last[k]=t;});
+    const lib=turma.liberacoes||{};
     if(!cols.length){ c.innerHTML='<p class="empty">Nenhuma atividade criada ainda.</p>'; return; }
-    if(!roster.length){ c.innerHTML='<div class="info">Cadastre a lista de alunos na aba <b>👥 Alunos</b> para ver, na ordem da turma, quem fez (verde) e quem não fez (vermelho).</div>'; return; }
-    const head=`<th>Nº</th><th>Aluno</th>`+cols.map(a=>`<th>${esc(a.titulo)}</th>`).join("");
-    const body=roster.map((nome,i)=>{ const nl=norm(nome).toLowerCase();
-      const cells=cols.map(a=>{ const v=best[nl+"||"+a.id];
+    if(!roster.length){ c.innerHTML='<div class="info">Cadastre a lista de alunos na aba <b>👥 Alunos</b> para ver quem fez (verde) e quem não fez (vermelho).</div>'; return; }
+    const head=`<th>Nº</th><th style="text-align:left">Aluno</th>`+cols.map(a=>`<th>${esc(a.titulo)}</th>`).join("");
+    const body=roster.map((nome,i)=>{ const nl=deburr(nome);
+      const cells=cols.map(a=>{ const k=nl+"||"+a.id; const v=best[k];
         if(v==null) return `<td class="r">não fez</td>`;
-        return `<td class="g">${a.vale_nota?fmt(v):"✓"}</td>`; }).join("");
-      return `<tr><td>${i+1}</td><td>${esc(nome)}</td>${cells}</tr>`; }).join("");
-    // alunos que responderam mas não estão na lista
-    const rosterSet=new Set(roster.map(n=>norm(n).toLowerCase()));
-    const extras=[...new Set(resp.map(r=>norm(r.aluno_nome)).filter(n=>!rosterSet.has(n.toLowerCase())))];
-    const extraHtml=extras.length?`<div class="warn">⚠️ ${extras.length} envio(s) com nome fora da lista: ${extras.map(esc).join(", ")}. (Provavelmente turma sem lista quando responderam.)</div>`:"";
-    c.innerHTML=`<p class="sub">Lista da turma na ordem cadastrada. <span style="color:var(--ok);font-weight:800">Verde</span> = fez · <span style="color:var(--no);font-weight:800">vermelho</span> = não fez.</p>
-      <button class="btn amber" id="csv">⬇ Baixar planilha (CSV)</button>${extraHtml}
+        const rel=lib[k]; const pend=!!rel&&(!last[k]||rel>last[k]);
+        return `<td class="g" data-k="${esc(k)}" data-nome="${esc(nome)}" data-act="${a.id}" title="Clique para liberar refazer" style="cursor:pointer">${a.vale_nota?fmt(v):"✓"}${pend?" 🔓":""}</td>`; }).join("");
+      return `<tr><td>${i+1}</td><td style="text-align:left">${esc(nome)}</td>${cells}</tr>`; }).join("");
+    const rosterSet=new Set(roster.map(n=>deburr(n)));
+    const extras=[...new Set(resp.map(r=>norm(r.aluno_nome)).filter(n=>!rosterSet.has(deburr(n))))];
+    const extraHtml=extras.length?`<div class="warn">⚠️ ${extras.length} envio(s) com nome fora da lista: ${extras.map(esc).join(", ")}.</div>`:"";
+    c.innerHTML=`<p class="sub"><span style="color:var(--ok);font-weight:800">Verde</span> = fez (clique numa nota para liberar refazer) · <span style="color:var(--no);font-weight:800">vermelho</span> = não fez · 🔓 = liberado p/ refazer.</p>
+      <button class="btn amber" id="csv" style="width:auto">⬇ Baixar planilha (CSV)</button>${extraHtml}
       <div class="scroll mt"><table><thead><tr>${head}</tr></thead><tbody>${body}</tbody></table></div>`;
+    c.querySelectorAll("td.g[data-k]").forEach(td=>td.onclick=async()=>{
+      const at=(cols.find(x=>x.id===td.dataset.act)||{}).titulo||"esta atividade";
+      if(confirm("Liberar \""+td.dataset.nome+"\" para REFAZER \""+at+"\"?")){
+        const l=Object.assign({},turma.liberacoes||{}); l[td.dataset.k]=new Date().toISOString();
+        try{ await dbSalvarLiberacoes(turma.id,l); turma.liberacoes=l; abaNotas(turma); }catch(e){erro(e);}
+      }
+    });
     document.getElementById("csv").onclick=()=>{
       let csv="Nº,Aluno,"+cols.map(a=>'"'+a.titulo.replace(/"/g,"")+'"').join(",")+"\n";
-      roster.forEach((nome,i)=>{ const nl=norm(nome).toLowerCase();
+      roster.forEach((nome,i)=>{ const nl=deburr(nome);
         csv+=(i+1)+',"'+nome+'",'+cols.map(a=>{const v=best[nl+"||"+a.id]; return v==null?'"não fez"':'"'+(a.vale_nota?fmt(v):"OK")+'"';}).join(",")+"\n"; });
       const blob=new Blob(["\ufeff"+csv],{type:"text/csv;charset=utf-8"});
       const aa=document.createElement("a");aa.href=URL.createObjectURL(blob);aa.download="notas-"+turma.nome.replace(/\s+/g,"_")+".csv";aa.click();
