@@ -90,6 +90,10 @@
   .sugitem:last-child{border-bottom:none;} .sugitem:hover{background:var(--brand-soft);}
   .scroll{max-height:74vh;}
   td.g[data-k]:hover{filter:brightness(.94);}
+  .navq{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px;}
+  .qchip{width:34px;height:34px;border-radius:9px;border:1.5px solid var(--line);background:#fff;font-weight:800;cursor:pointer;color:var(--ink-soft);font-family:inherit;}
+  .qchip.ok{background:var(--ok-soft);color:var(--ok);border-color:transparent;}
+  .qchip.cur{outline:3px solid var(--brand-soft);border-color:var(--brand);color:var(--brand);}
 </style>
 </head>
 <body>
@@ -260,13 +264,14 @@ function duplaSelect(a,turma,nome){
   setWide("760px");
   const roster=(turma.alunos||[]).filter(n=>deburr(n)!==deburr(nome)); window.__partner=null;
   app.innerHTML=`<div class="card">${SCHOOL}<button class="back" onclick="home()">‹ Sair</button>
-    <div class="eyebrow">${esc(a.titulo)}</div><h2>Como você vai fazer? 👥</h2>
-    <p class="sub">Esta atividade pode ser feita sozinho(a) ou em dupla. Na dupla, a mesma nota vai para os dois.</p>
-    <button class="btn" id="solo">Fazer sozinho(a)</button>
-    <div style="text-align:center;color:var(--ink-soft);margin:14px 0;font-weight:700">— ou em dupla —</div>
-    <label for="pn">Nome do(a) colega</label><input type="text" id="pn" placeholder="Comece a digitar o nome do colega…" autocomplete="off"><div id="psug" class="sug"></div>
+    <div class="eyebrow">${esc(a.titulo)} · 👥 pode ser em dupla</div><h2>Você vai fazer sozinho(a) ou em dupla?</h2>
+    <div class="info" style="margin-top:0">Quem está respondendo: <b>${esc(nome)}</b></div>
+    <button class="btn mt" id="solo">Vou fazer sozinho(a)</button>
+    <div style="text-align:center;color:var(--ink-soft);margin:16px 0;font-weight:700">— OU —</div>
+    <p class="sub" style="margin-bottom:6px"><b>Em dupla:</b> vocês fazem juntos neste aparelho e a mesma nota vai para os dois. Digite o nome do(a) colega que está com você:</p>
+    <label for="pn">Nome do(a) colega de ${esc(nome.split(" ")[0])}</label><input type="text" id="pn" placeholder="Comece a digitar o nome do(a) colega…" autocomplete="off"><div id="psug" class="sug"></div>
     <div id="w" class="warn hidden"></div>
-    <button class="btn amber mt" id="dupla">Fazer em dupla →</button></div>`;
+    <button class="btn amber mt" id="dupla">Somos uma dupla — começar →</button></div>`;
   const inp=document.getElementById("pn"), sug=document.getElementById("psug");
   inp.addEventListener("input",()=>{ window.__partner=null; const q=deburr(inp.value);
     if(q.length<2){sug.innerHTML="";return;}
@@ -284,30 +289,57 @@ function duplaSelect(a,turma,nome){
 
 /* ---------- QUIZ (alternativas embaralhadas por aluno) ---------- */
 function quizRun(a,turma,nome,partner){
-  const qs=(a.conteudo&&a.conteudo.questoes)||[]; let cur=0; const ans=new Array(qs.length).fill(null);
+  const qs0=(a.conteudo&&a.conteudo.questoes)||[];
+  const ordem=a.embaralhar?shuffle(qs0.map((_,i)=>i)):qs0.map((_,i)=>i);
+  const qs=ordem.map(i=>qs0[i]);
+  let cur=0; const ans=new Array(qs.length).fill(null);
   const base=qs.map(q=>{ let opts,corr;
     if(q.tipo==="vf"){opts=["Verdadeiro","Falso"];corr=q.correta?0:1;} else {opts=q.alternativas.slice();corr=q.correta;}
     return {opts,corr,order:shuffle(opts.map((_,i)=>i))}; });
+  let saidas=0;
+  const onVis=()=>{ if(document.hidden) saidas++; };
+  document.addEventListener("visibilitychange",onVis);
+  function cleanup(){ try{document.removeEventListener("visibilitychange",onVis);}catch(e){} }
+  function navq(){ return '<div class="navq">'+qs.map((_,i)=>`<button class="qchip ${i===cur?'cur':''} ${ans[i]!=null?'ok':''}" data-q="${i}">${i+1}</button>`).join("")+'</div>'; }
   function render(){
     const q=qs[cur], b=base[cur];
     const opts=b.order.map((origIdx,disp)=>`<div class="opt ${ans[cur]===disp?"sel":""}" data-i="${disp}"><span class="key">${KEYS[disp]}</span><span>${esc(b.opts[origIdx])}</span></div>`).join("");
+    const resp=ans.filter(x=>x!=null).length;
     app.innerHTML=`<div class="card">${SCHOOL}
-      <div class="topbar"><span>Questão <b>${cur+1}</b> de <b>${qs.length}</b></span><span>${esc(a.titulo)}</span></div>
-      <div class="progress"><i style="width:${cur/qs.length*100}%"></i></div>
+      <div class="topbar"><span>Questão <b>${cur+1}</b> de <b>${qs.length}</b></span><span>${resp}/${qs.length} respondidas</span></div>
+      <div class="progress"><i style="width:${resp/qs.length*100}%"></i></div>
+      ${navq()}
+      <div style="background:#fff7e6;color:#9a6b00;border-radius:10px;padding:9px 12px;font-size:.82rem;margin-bottom:12px">⚠️ Não saia desta aba durante a prova — o professor é avisado se isso acontecer.</div>
       <div class="eyebrow">Questão ${String(cur+1).padStart(2,"0")}</div>
       <div class="qtext">${esc(q.enunciado)}</div>${q.frase?`<div class="qphrase">${esc(q.frase)}</div>`:""}
-      <div id="opts">${opts}</div><div id="w" class="warn hidden">Selecione uma alternativa.</div>
-      <div class="row mt">${cur>0?'<button class="btn ghost" id="prev">Voltar</button>':""}
-        <button class="btn" id="next">${cur===qs.length-1?"Finalizar ✓":"Próxima →"}</button></div></div>`;
+      <div id="opts">${opts}</div>
+      <div class="row mt">${cur>0?'<button class="btn ghost" id="prev">← Voltar</button>':""}
+        <button class="btn" id="next">${cur===qs.length-1?"Revisar e entregar →":"Próxima →"}</button></div></div>`;
     document.querySelectorAll(".opt").forEach(el=>el.onclick=()=>{ans[cur]=+el.dataset.i;render();});
+    document.querySelectorAll(".qchip").forEach(bt=>bt.onclick=()=>{cur=+bt.dataset.q;render();});
     const pv=document.getElementById("prev"); if(pv)pv.onclick=()=>{cur--;render();};
-    document.getElementById("next").onclick=()=>{if(ans[cur]==null){document.getElementById("w").classList.remove("hidden");return;} if(cur<qs.length-1){cur++;render();}else finish();};
+    document.getElementById("next").onclick=()=>{ if(cur<qs.length-1){cur++;render();} else review(); };
+  }
+  function review(){
+    const itens=qs.map((q,i)=>{const b=base[i]; const r=ans[i]==null?'<span style="color:var(--no);font-weight:700">Em branco</span>':esc(b.opts[b.order[ans[i]]]);
+      return `<div class="row-item"><div class="ri-main"><div class="ri-title">Questão ${i+1}</div><div class="ri-meta">${r}</div></div><button class="btn sm soft" data-q="${i}">Editar</button></div>`;}).join("");
+    const faltam=ans.filter(x=>x==null).length;
+    app.innerHTML=`<div class="card">${SCHOOL}<h2>Revise antes de entregar</h2>
+      <p class="sub">Toque em “Editar” para mudar qualquer resposta. ${faltam?`<b style="color:var(--no)">${faltam} em branco.</b>`:"Tudo respondido! ✅"}</p>
+      ${itens}
+      <button class="btn ghost mt" id="volta">← Voltar às questões</button>
+      <button class="btn amber mt-s" id="entregar">Entregar prova ✓</button></div>`;
+    document.querySelectorAll("[data-q]").forEach(bt=>bt.onclick=()=>{cur=+bt.dataset.q;render();});
+    document.getElementById("volta").onclick=()=>render();
+    document.getElementById("entregar").onclick=()=>{ if(faltam && !confirm("Há "+faltam+" questão(ões) em branco. Entregar mesmo assim?")) return; finish(); };
   }
   async function finish(){
+    cleanup();
     let hits=0; qs.forEach((q,i)=>{const b=base[i]; if(ans[i]!=null&&b.order[ans[i]]===b.corr)hits++;});
     const nota=a.vale_nota?Math.round(a.valor*hits/qs.length*10)/10:0;
-    try{ await dbSalvarResposta({atividade_id:a.id,turma_id:turma.id,aluno_nome:nome,nota,acertos:hits,total:qs.length,detalhes:partner?{dupla_com:partner}:{}});
-      if(partner) await dbSalvarResposta({atividade_id:a.id,turma_id:turma.id,aluno_nome:partner,nota,acertos:hits,total:qs.length,detalhes:{dupla_com:nome}}); }catch(e){}
+    const det=partner?{dupla_com:partner}:{}; det.saidas=saidas;
+    try{ await dbSalvarResposta({atividade_id:a.id,turma_id:turma.id,aluno_nome:nome,nota,acertos:hits,total:qs.length,detalhes:det});
+      if(partner) await dbSalvarResposta({atividade_id:a.id,turma_id:turma.id,aluno_nome:partner,nota,acertos:hits,total:qs.length,detalhes:{dupla_com:nome,saidas:saidas}}); }catch(e){}
     quizResult(a,turma,nome,qs,base,ans,hits,nota,partner);
   }
   render();
@@ -327,7 +359,7 @@ function quizResult(a,turma,nome,qs,base,ans,hits,nota,partner){
       <div class="pill" style="background:${aprov?'var(--ok-soft)':'var(--no-soft)'};color:${aprov?'var(--ok)':'var(--no)'}">${a.vale_nota?(aprov?"Muito bem! 🎉":"Revise o conteúdo"):"Concluído! 🎉"}</div></div>
     <p class="sub center mt"><b>${esc(nome)}</b> · ${esc(turma.nome)}<br>Acertos: <b>${hits}</b> de ${qs.length}<br>
       <span style="font-size:.8rem">Concluído em ${ag.toLocaleDateString("pt-BR")} às ${ag.toLocaleTimeString("pt-BR",{hour:"2-digit",minute:"2-digit"})}</span></p>
-    <div class="info">✅ Nota salva automaticamente${partner?" para você e para "+esc(partner):""}.</div>
+    <div class="info">✅ Pronto! Sua nota já foi enviada ao professor${partner?" (para você e para "+esc(partner)+")":""}. Você não precisa fazer mais nada — pode aguardar.</div>
     <h2 class="mt">Revisão comentada</h2>${review}
     <button class="btn amber mt" id="v">Voltar às atividades</button></div>`;
   document.getElementById("v").onclick=()=>alunoAtividades(turma,nome);
@@ -360,7 +392,7 @@ function memoriaRun(a,turma,nome,partner){
     app.innerHTML=`<div class="card">${SCHOOL}<div class="center"><div class="score-big">🎉</div>
       <div class="pill" style="background:var(--ok-soft);color:var(--ok)">Você completou o jogo!</div></div>
       <p class="sub center mt"><b>${esc(nome)}</b> · ${esc(turma.nome)}<br>Jogadas: <b>${moves}</b> · Tempo: <b>${seg}s</b></p>
-      <div class="info">✅ Desempenho salvo${partner?" para você e para "+esc(partner):""}.</div>
+      <div class="info">✅ Pronto! Seu resultado já foi enviado ao professor${partner?" (para você e para "+esc(partner)+")":""}. Pode aguardar.</div>
       <button class="btn amber mt" id="v">Voltar às atividades</button></div>`;
     document.getElementById("v").onclick=()=>alunoAtividades(turma,nome);
   }
@@ -476,6 +508,7 @@ async function abaAtividades(turma){
       <label class="mt">Quem vê esta atividade?</label>
       <select id="f-pub"><option value="todos">Todos os alunos</option><option value="regulares">Só alunos regulares</option><option value="adaptados">Só alunos adaptados (PEI)</option></select>
       <label class="check mt"><input type="checkbox" id="f-dup"> Permitir fazer em dupla (a nota vai para os dois)</label>
+      <label class="check mt"><input type="checkbox" id="f-emb"> Embaralhar a ordem das questões (use em provas SEM texto-base)</label>
       <div id="iw" class="warn hidden"></div>
       <button class="btn mt-s" id="imp" disabled>Adicionar atividade</button>`;
     c.innerHTML=html;
@@ -508,8 +541,8 @@ async function abaAtividades(turma){
       const sem=fsem.checked; const valor=sem?0:parseFloat(fval.value);
       if(!sem&&isNaN(valor)){iw.textContent="Informe a pontuação ou marque \"Sem pontuação\".";iw.classList.remove("hidden");return;}
       const titulo=norm(loaded.titulo||loadedName)||"Atividade";
-      const publico=document.getElementById("f-pub").value; const dupla=document.getElementById("f-dup").checked;
-      try{ await dbCriarAtividade({turma_id:turma.id,titulo,tipo:loaded.tipo,valor,vale_nota:!sem,publico,dupla,conteudo:loaded.conteudo,ativo:true}); abaAtividades(turma); }catch(e){ erro(e); }
+      const publico=document.getElementById("f-pub").value; const dupla=document.getElementById("f-dup").checked; const embaralhar=document.getElementById("f-emb").checked;
+      try{ await dbCriarAtividade({turma_id:turma.id,titulo,tipo:loaded.tipo,valor,vale_nota:!sem,publico,dupla,embaralhar,conteudo:loaded.conteudo,ativo:true}); abaAtividades(turma); }catch(e){ erro(e); }
     };
   }catch(e){erro(e);}
 }
@@ -519,8 +552,8 @@ async function abaNotas(turma){
   try{
     const [ats0,resp]=await Promise.all([dbAtividades(turma.id,false),dbRespostasTurma(turma.id)]);
     const cols=ats0.sort(byCreated); const roster=turma.alunos||[];
-    const best={},last={}; resp.forEach(r=>{const k=deburr(r.aluno_nome)+"||"+r.atividade_id;
-      if(best[k]==null||r.nota>best[k])best[k]=r.nota; const t=r.created_at||""; if(!last[k]||t>last[k])last[k]=t;});
+    const best={},last={},sai={}; resp.forEach(r=>{const k=deburr(r.aluno_nome)+"||"+r.atividade_id;
+      if(best[k]==null||r.nota>best[k])best[k]=r.nota; const t=r.created_at||""; if(!last[k]||t>last[k])last[k]=t; const s=(r.detalhes&&r.detalhes.saidas)||0; if(!sai[k]||s>sai[k])sai[k]=s;});
     const lib=turma.liberacoes||{};
     if(!cols.length){ c.innerHTML='<p class="empty">Nenhuma atividade criada ainda.</p>'; return; }
     if(!roster.length){ c.innerHTML='<div class="info">Cadastre a lista de alunos na aba <b>👥 Alunos</b> para ver quem fez (verde) e quem não fez (vermelho).</div>'; return; }
@@ -528,13 +561,14 @@ async function abaNotas(turma){
     const body=roster.map((nome,i)=>{ const nl=deburr(nome);
       const cells=cols.map(a=>{ const k=nl+"||"+a.id; const v=best[k];
         if(v==null) return `<td class="r">não fez</td>`;
-        const rel=lib[k]; const pend=!!rel&&(!last[k]||rel>last[k]);
-        return `<td class="g" data-k="${esc(k)}" data-nome="${esc(nome)}" data-act="${a.id}" title="Clique para liberar refazer" style="cursor:pointer">${a.vale_nota?fmt(v):"✓"}${pend?" 🔓":""}</td>`; }).join("");
+        const rel=lib[k]; const pend=!!rel&&(!last[k]||rel>last[k]); const s=sai[k]||0;
+        const al=s>0?` <span title="Saiu da aba ${s} vez(es) durante a prova">⚠️${s}</span>`:"";
+        return `<td class="g" data-k="${esc(k)}" data-nome="${esc(nome)}" data-act="${a.id}" title="Clique para liberar refazer" style="cursor:pointer">${a.vale_nota?fmt(v):"✓"}${pend?" 🔓":""}${al}</td>`; }).join("");
       return `<tr><td>${i+1}</td><td style="text-align:left">${esc(nome)}</td>${cells}</tr>`; }).join("");
     const rosterSet=new Set(roster.map(n=>deburr(n)));
     const extras=[...new Set(resp.map(r=>norm(r.aluno_nome)).filter(n=>!rosterSet.has(deburr(n))))];
     const extraHtml=extras.length?`<div class="warn">⚠️ ${extras.length} envio(s) com nome fora da lista: ${extras.map(esc).join(", ")}.</div>`:"";
-    c.innerHTML=`<p class="sub"><span style="color:var(--ok);font-weight:800">Verde</span> = fez (clique numa nota para liberar refazer) · <span style="color:var(--no);font-weight:800">vermelho</span> = não fez · 🔓 = liberado p/ refazer.</p>
+    c.innerHTML=`<p class="sub"><span style="color:var(--ok);font-weight:800">Verde</span> = fez (clique numa nota para liberar refazer) · <span style="color:var(--no);font-weight:800">vermelho</span> = não fez · 🔓 = liberado p/ refazer · ⚠️ = saiu da aba durante a prova.</p>
       <button class="btn amber" id="csv" style="width:auto">⬇ Baixar planilha (CSV)</button>${extraHtml}
       <div class="scroll mt"><table><thead><tr>${head}</tr></thead><tbody>${body}</tbody></table></div>`;
     c.querySelectorAll("td.g[data-k]").forEach(td=>td.onclick=async()=>{
