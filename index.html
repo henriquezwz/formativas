@@ -407,6 +407,7 @@ function profLogin(){
     <label for="pw">Senha</label><input type="password" id="pw" placeholder="Sua senha" autocomplete="current-password">
     <div id="w" class="warn hidden"></div>
     <button class="btn mt" id="go">Entrar</button>
+    <button class="btn ghost mt-s" id="esq">Esqueci minha senha</button>
     <button class="btn ghost mt-s" id="novo">Primeiro acesso? Criar minha conta</button></div>`;
   const w=document.getElementById("w"); const showErr=m=>{w.textContent=m;w.classList.remove("hidden");};
   document.getElementById("go").onclick=async()=>{ w.classList.add("hidden");
@@ -415,6 +416,13 @@ function profLogin(){
       await auth.signInWithEmailAndPassword(em,pw);
       if(!isTeacher()){await auth.signOut();showErr("Esta conta não tem permissão de professor.");return;} profTurmas();
     }catch(e){ showErr("E-mail ou senha incorretos."); } };
+  document.getElementById("esq").onclick=async()=>{ w.classList.add("hidden");
+    const emRaw=document.getElementById("em").value; const em=norm(emRaw)||TEACHER_EMAIL;
+    if(em.toLowerCase()!==TEACHER_EMAIL.toLowerCase()){showErr("Use o e-mail autorizado do professor para redefinir a senha.");return;}
+    try{ await auth.sendPasswordResetEmail(em);
+      w.textContent="E-mail de redefinição enviado para "+em+". Verifique a caixa de entrada (e o spam) e clique no link para criar uma nova senha.";
+      w.classList.remove("hidden"); w.style.color="var(--ok)"; }
+    catch(e){ showErr(e.code==="auth/user-not-found"?"Não existe conta com esse e-mail. Use \"Primeiro acesso\" para criar uma.":"Não foi possível enviar o e-mail de redefinição."); } };
   document.getElementById("novo").onclick=async()=>{ w.classList.add("hidden");
     const em=norm(document.getElementById("em").value), pw=document.getElementById("pw").value;
     if(em.toLowerCase()!==TEACHER_EMAIL.toLowerCase()){showErr("Só é possível criar conta com o e-mail autorizado.");return;}
