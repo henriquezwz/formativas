@@ -1,0 +1,226 @@
+{
+  "titulo": "Revisão — Orações Coordenadas e Subordinadas Substantivas (8º Ano)",
+  "tipo": "quiz",
+  "valor": 5,
+  "vale_nota": true,
+  "conteudo": {
+    "questoes": [
+      {
+        "frase": "“Muitos alunos trouxeram o celular, mas deixaram o aparelho na mochila; a escola percebeu melhora no pátio, portanto manteve a regra.”",
+        "enunciado": "As orações iniciadas por “mas” e por “portanto” classificam-se, respectivamente, como orações coordenadas sindéticas",
+        "alternativas": [
+          "adversativa e conclusiva.",
+          "explicativa e conclusiva.",
+          "adversativa e explicativa.",
+          "aditiva e adversativa."
+        ],
+        "correta": 0
+      },
+      {
+        "frase": "“Ou a escola oferece atividades no recreio, ou os alunos ficam parados; os professores apoiaram a proposta, pois perceberam mudança no pátio.”",
+        "enunciado": "As orações iniciadas por “ou” e por “pois” classificam-se, respectivamente, como orações coordenadas sindéticas",
+        "alternativas": [
+          "alternativa e explicativa.",
+          "aditiva e conclusiva.",
+          "alternativa e conclusiva.",
+          "adversativa e explicativa."
+        ],
+        "correta": 0
+      },
+      {
+        "frase": "“A diretora avisou que a reunião mudou de dia, e os pais confirmaram presença.”",
+        "enunciado": "As orações “que a reunião mudou de dia” e “e os pais confirmaram presença” classificam-se, respectivamente, como oração",
+        "alternativas": [
+          "subordinada substantiva objetiva direta e coordenada sindética aditiva.",
+          "subordinada substantiva subjetiva e coordenada sindética aditiva.",
+          "coordenada sindética aditiva e subordinada substantiva objetiva direta.",
+          "subordinada substantiva objetiva direta e coordenada sindética explicativa."
+        ],
+        "correta": 0
+      },
+      {
+        "enunciado": "Assinale a alternativa em que a oração destacada funciona como sujeito da oração principal.",
+        "alternativas": [
+          "“Os alunos disseram que o intervalo passou rápido”",
+          "“É necessário que a escola avise as famílias”",
+          "“A professora percebeu que a turma estava cansada”",
+          "“Todos notaram que o pátio ficou mais cheio”"
+        ],
+        "correta": 1
+      },
+      {
+        "enunciado": "Assinale a alternativa em que a oração destacada funciona como sujeito da oração principal.",
+        "alternativas": [
+          "“Convém que todos leiam o aviso da secretaria”",
+          "“O coordenador explicou que a prova foi adiada”",
+          "“Os pais souberam que a reunião seria on-line”",
+          "“A turma garantiu que faria a tarefa”"
+        ],
+        "correta": 0
+      },
+      {
+        "enunciado": "Assinale a alternativa em que a oração destacada completa o sentido do verbo da oração principal, funcionando como objeto direto.",
+        "alternativas": [
+          "“É importante que a família acompanhe os estudos”",
+          "“Convém que o aluno revise o conteúdo”",
+          "“A professora confirmou que a atividade valia nota”",
+          "“Era necessário que a escola mudasse o horário”"
+        ],
+        "correta": 2
+      },
+      {
+        "frase": "“O professor percebeu que a turma tinha estudado para a prova.”",
+        "enunciado": "A oração “que a turma tinha estudado para a prova” é classificada como oração",
+        "alternativas": [
+          "subordinada substantiva subjetiva, pois é o sujeito de “percebeu”.",
+          "subordinada substantiva objetiva direta, pois completa o verbo “perceber”.",
+          "coordenada sindética explicativa, pois explica o que foi percebido.",
+          "coordenada sindética aditiva, pois acrescenta uma informação ao verbo."
+        ],
+        "correta": 1
+      },
+      {
+        "frase": "“É provável que a chuva atrapalhe o passeio da turma.”",
+        "enunciado": "A oração “que a chuva atrapalhe o passeio da turma” é classificada como oração",
+        "alternativas": [
+          "subordinada substantiva objetiva direta, pois completa o verbo “é”.",
+          "subordinada substantiva subjetiva, pois funciona como sujeito de “é provável”.",
+          "coordenada sindética conclusiva, pois conclui a ideia anterior.",
+          "coordenada assindética, pois não há conjunção ligando as orações."
+        ],
+        "correta": 1
+      },
+      {
+        "frase": "“A escola comprou novos livros, pois a biblioteca estava desatualizada.”",
+        "enunciado": "A oração iniciada por “pois” é classificada como oração",
+        "alternativas": [
+          "coordenada sindética conclusiva, pois apresenta o resultado da compra.",
+          "coordenada sindética explicativa, pois apresenta o motivo da afirmação anterior.",
+          "subordinada substantiva objetiva direta, pois completa o verbo “comprou”.",
+          "coordenada sindética adversativa, pois contraria a ideia anterior."
+        ],
+        "correta": 1
+      },
+      {
+        "frase": "“Leia o rótulo antes de usar o produto. O uso errado pode causar acidentes.”",
+        "enunciado": "Se essas duas orações fossem unidas em um só período, sem mudar o sentido, a conjunção adequada para ligá-las seria",
+        "alternativas": [
+          "“mas”, já que a segunda frase contraria a primeira.",
+          "“ou”, já que as frases indicam duas escolhas.",
+          "“pois”, já que a segunda frase justifica a primeira.",
+          "“portanto”, já que a segunda frase conclui a primeira."
+        ],
+        "correta": 2
+      },
+      {
+        "frase": "“O time treinou todos os dias da semana. A equipe venceu o campeonato.”",
+        "enunciado": "Se essas duas orações fossem unidas em um só período, sem mudar o sentido, a conjunção adequada para ligá-las seria",
+        "alternativas": [
+          "“portanto”, já que a segunda frase apresenta a conclusão da primeira.",
+          "“pois”, já que a segunda frase explica a primeira.",
+          "“mas”, já que a segunda frase se opõe à primeira.",
+          "“ou”, já que as frases indicam alternância."
+        ],
+        "correta": 0
+      },
+      {
+        "frase": "“A coordenadora, responsável pelo turno da manhã, explicou que o horário mudaria em novembro, e os professores receberam o novo quadro na mesma semana.”",
+        "enunciado": "A oração “e os professores receberam o novo quadro na mesma semana” classifica-se como oração",
+        "alternativas": [
+          "coordenada sindética aditiva.",
+          "subordinada substantiva objetiva direta.",
+          "coordenada sindética explicativa.",
+          "subordinada substantiva subjetiva."
+        ],
+        "correta": 0
+      },
+      {
+        "frase": "“Os estudantes do 8º ano, que participaram do projeto de leitura, informaram que levariam os livros para casa, e a biblioteca registrou os empréstimos.”",
+        "enunciado": "A oração “que levariam os livros para casa” classifica-se como oração",
+        "alternativas": [
+          "coordenada sindética aditiva.",
+          "subordinada substantiva objetiva direta.",
+          "coordenada assindética.",
+          "subordinada substantiva subjetiva."
+        ],
+        "correta": 1
+      },
+      {
+        "frase": "“Os moradores do bairro afirmam que a praça melhorou depois da reforma.”",
+        "enunciado": "Qual é a oração principal desse período?",
+        "alternativas": [
+          "“que a praça melhorou depois da reforma”",
+          "“Os moradores do bairro afirmam”",
+          "“depois da reforma”",
+          "“a praça melhorou”"
+        ],
+        "correta": 1
+      },
+      {
+        "frase": "“É fundamental que as famílias acompanhem as notas dos filhos.”",
+        "enunciado": "Qual é a oração principal desse período?",
+        "alternativas": [
+          "“É fundamental”",
+          "“que as famílias acompanhem as notas dos filhos”",
+          "“as notas dos filhos”",
+          "“acompanhem as notas dos filhos”"
+        ],
+        "correta": 0
+      },
+      {
+        "frase": "“No fim da tarde, o pátio mudou: os alunos conversam, correm, jogam bola.”",
+        "enunciado": "As orações desse período classificam-se como",
+        "alternativas": [
+          "coordenadas sindéticas aditivas.",
+          "coordenadas assindéticas.",
+          "subordinadas substantivas objetivas diretas.",
+          "uma oração principal e três subordinadas."
+        ],
+        "correta": 1
+      },
+      {
+        "frase": "“Chegou cedo, abriu a sala, organizou as carteiras.”",
+        "enunciado": "Essas orações são chamadas de assindéticas porque",
+        "alternativas": [
+          "estão ligadas sem conjunção, apenas pela pontuação.",
+          "completam o sentido do primeiro verbo.",
+          "estão ligadas pela conjunção “e”.",
+          "dependem de uma oração principal para ter sentido."
+        ],
+        "correta": 0
+      },
+      {
+        "frase": "(I) “A secretária organizou os documentos e enviou a lista para a direção.” (II) “A secretária informou que a lista estava pronta.”",
+        "enunciado": "Comparando a oração “e enviou a lista para a direção” (I) com a oração “que a lista estava pronta” (II), é correto afirmar que",
+        "alternativas": [
+          "a I apenas se soma à oração anterior, por isso é coordenada; a II completa o verbo “informou”, por isso é subordinada.",
+          "a I completa o verbo “organizou”, por isso é subordinada; a II apenas se soma à anterior, por isso é coordenada.",
+          "as duas são coordenadas, pois as duas têm sentido completo sozinhas.",
+          "as duas são subordinadas, pois as duas dependem da primeira oração."
+        ],
+        "correta": 0
+      },
+      {
+        "enunciado": "Para saber se uma oração iniciada por “que” é subordinada substantiva, o teste mais seguro é",
+        "alternativas": [
+          "verificar se ela pode ser substituída por “isso”, completando o verbo da outra oração ou sendo o sujeito dele.",
+          "verificar se ela vem logo depois de uma vírgula.",
+          "verificar se ela tem um verbo conjugado.",
+          "verificar se ela é a oração mais longa do período."
+        ],
+        "correta": 0
+      },
+      {
+        "frase": "“A turma estudou bastante para a prova, mas o resultado ficou abaixo do esperado.”",
+        "enunciado": "A conjunção “mas” estabelece, entre as orações, uma relação de",
+        "alternativas": [
+          "oposição.",
+          "conclusão.",
+          "explicação.",
+          "adição."
+        ],
+        "correta": 0
+      }
+    ]
+  }
+}

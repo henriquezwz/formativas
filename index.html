@@ -505,8 +505,9 @@ async function abaAtividades(turma){
           <button class="btn sm ${a.ativo?'soft':'ghost'}" data-act="toggle" data-id="${a.id}" data-on="${a.ativo}">${a.ativo?"Ativa":"Inativa"}</button>
           <button class="btn sm danger" data-act="del" data-id="${a.id}">Excluir</button></div></div>`;});
       html+='</div>';}
-    html+=`<h2 class="mt">Adicionar atividade</h2>
-      <p class="sub">Escolha o arquivo (.json) que recebeu. O título vem do próprio arquivo.</p>
+    html+=`<div id="catalogo"><p class="empty">Carregando catálogo…</p></div>
+      <h2 class="mt">Adicionar atividade por arquivo</h2>
+      <p class="sub">Para uma atividade que não está no catálogo, escolha o arquivo (.json). O título vem do próprio arquivo.</p>
       <label class="filebtn" for="file">📁 Escolher arquivo da atividade</label>
       <input type="file" id="file" accept=".json,application/json" class="hidden">
       <div id="preview" class="hidden info"></div>
@@ -520,6 +521,7 @@ async function abaAtividades(turma){
       <div id="iw" class="warn hidden"></div>
       <button class="btn mt-s" id="imp" disabled>Adicionar atividade</button>`;
     c.innerHTML=html;
+    renderCatalogo(turma,ats);
     document.getElementById("cp").onclick=()=>{navigator.clipboard?.writeText(link);document.getElementById("cp").textContent="Copiado!";};
     c.querySelectorAll("[data-act]").forEach(b=>b.onclick=async()=>{try{
       if(b.dataset.act==="del"){if(confirm("Excluir esta atividade?")){await dbApagarAtividade(b.dataset.id);abaAtividades(turma);}}
@@ -553,6 +555,46 @@ async function abaAtividades(turma){
       try{ await dbCriarAtividade({turma_id:turma.id,titulo,tipo:loaded.tipo,valor,vale_nota:!sem,publico,dupla,embaralhar,conteudo:loaded.conteudo,ativo:true}); abaAtividades(turma); }catch(e){ erro(e); }
     };
   }catch(e){erro(e);}
+}
+
+/* ---------- CATÁLOGO DE ATIVIDADES (arquivos em /catalogo, publicados junto com o app) ---------- */
+const anoDaTurma=t=>{ const m=(t.nome||"").match(/\d/); return m?m[0]:null; };
+async function instalarCatalogo(x,t){
+  const r=await fetch("catalogo/"+x.arquivo+"?v="+Date.now()); if(!r.ok)throw new Error("Arquivo do catálogo não encontrado: "+x.arquivo);
+  const j=await r.json(); const ats=await dbAtividades(t.id,false);
+  for(const a of ats.filter(a=>a.catalogo_id===x.id||a.titulo===x.titulo)) await dbApagarAtividade(a.id);
+  await dbCriarAtividade({turma_id:t.id,titulo:norm(j.titulo||x.titulo),tipo:j.tipo,valor:x.valor,vale_nota:x.valor>0,publico:x.publico||"todos",dupla:!!x.dupla,embaralhar:!!x.embaralhar,conteudo:j.conteudo,ativo:true,catalogo_id:x.id});
+}
+async function renderCatalogo(turma,ats){
+  const box=document.getElementById("catalogo"); if(!box)return;
+  let cat; try{ const r=await fetch("catalogo/index.json?v="+Date.now()); if(!r.ok)throw new Error("sem catálogo"); cat=await r.json(); }
+  catch(e){ box.innerHTML='<p class="empty">Catálogo indisponível. Abra o app pelo endereço publicado (github.io).</p>'; return; }
+  const ano=anoDaTurma(turma); let todos=false;
+  function draw(){
+    const lista=cat.filter(x=>todos||!ano||!x.ano||x.ano==="todos"||String(x.ano)===ano);
+    box.innerHTML=`<h2 class="mt">📚 Catálogo de atividades</h2>
+      <p class="sub">${todos||!ano?"Todas as atividades do catálogo.":"Atividades do "+ano+"º ano."} Um toque adiciona à turma <b>${esc(turma.nome)}</b>.</p>`+
+      (lista.length?lista.map((x,i)=>{ const ex=ats.some(a=>a.catalogo_id===x.id||a.titulo===x.titulo);
+        return `<div class="row-item"><div class="ri-main"><div class="ri-title">${x.tipo==="memoria"?"🎮":"📝"} ${esc(x.titulo)}</div>
+          <div class="ri-meta">${esc(x.descricao||"")}${x.descricao?" · ":""}${x.questoes} ${x.tipo==="memoria"?"pares":"questões"} · ${fmt(x.valor)} pts${ex?" · ✅ já nesta turma":""}</div></div>
+          <div class="row" style="flex:none;width:auto"><button class="btn sm ${ex?"ghost":""}" data-cat="${i}">${ex?"Substituir":"Adicionar"}</button>
+          ${x.ano&&x.ano!=="todos"?`<button class="btn sm soft" data-catall="${i}">Todas as turmas do ${esc(x.ano)}º</button>`:""}</div></div>`;}).join("")
+        :'<p class="empty">Nada no catálogo para este ano.</p>')+
+      `<button class="btn soft sm mt-s" style="width:auto" id="cat-tg">${todos?"Mostrar só deste ano":"Mostrar todos os anos"}</button>`;
+    document.getElementById("cat-tg").onclick=()=>{todos=!todos;draw();};
+    box.querySelectorAll("[data-cat]").forEach(b=>b.onclick=async()=>{ const x=lista[+b.dataset.cat];
+      const ex=ats.some(a=>a.catalogo_id===x.id||a.titulo===x.titulo);
+      if(ex&&!confirm("\""+x.titulo+"\" já está nesta turma. Substituir pela versão do catálogo?\n\nAs respostas já registradas nessa atividade deixam de aparecer nas notas.")) return;
+      b.disabled=true; b.textContent="Adicionando…";
+      try{ await instalarCatalogo(x,turma); abaAtividades(turma); }catch(e){ erro(e); } });
+    box.querySelectorAll("[data-catall]").forEach(b=>b.onclick=async()=>{ const x=lista[+b.dataset.catall];
+      b.disabled=true; b.textContent="Verificando…";
+      try{ const ts=(await dbTurmas()).filter(t=>anoDaTurma(t)===String(x.ano));
+        if(!confirm("Adicionar \""+x.titulo+"\" a: "+ts.map(t=>t.nome).join(", ")+"?\n\nSe a atividade já existir em alguma delas, será substituída (as respostas dessa atividade deixam de aparecer nas notas).")){ draw(); return; }
+        b.textContent="Adicionando…"; for(const t of ts) await instalarCatalogo(x,t); abaAtividades(turma);
+      }catch(e){ erro(e); } });
+  }
+  draw();
 }
 
 async function abaNotas(turma){
