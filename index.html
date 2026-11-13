@@ -154,6 +154,7 @@ async function dbAtividades(turmaId,soAtivas){ const s=await db.collection("ativ
 async function dbCriarAtividade(o){ await db.collection("atividades").add(Object.assign({created_at:new Date().toISOString()},o)); }
 async function dbApagarAtividade(id){ await db.collection("atividades").doc(id).delete(); }
 async function dbToggle(id,ativo){ await db.collection("atividades").doc(id).update({ativo}); }
+async function dbEmbaralhar(id,embaralhar){ await db.collection("atividades").doc(id).update({embaralhar}); }
 async function dbSalvarResposta(o){ await db.collection("respostas").add(Object.assign({uid:auth.currentUser.uid,created_at:new Date().toISOString()},o)); }
 async function dbRespostasTurma(turmaId){ const s=await db.collection("respostas").where("turma_id","==",turmaId).get(); return s.docs.map(d=>clean(d.data(),d.id)); }
 async function dbMinhasRespostas(turmaId){ const s=await db.collection("respostas").where("uid","==",auth.currentUser.uid).get(); return s.docs.map(d=>clean(d.data(),d.id)).filter(r=>r.turma_id===turmaId); }
@@ -289,6 +290,7 @@ function duplaSelect(a,turma,nome){
 
 /* ---------- QUIZ (alternativas embaralhadas por aluno) ---------- */
 function quizEscolha(a,turma,nome,partner){
+  if(a.embaralhar) return quizRun(a,turma,nome,partner,true);
   setWide("760px");
   app.innerHTML=`<div class="card">${SCHOOL}<button class="back" id="q-back">‹ Voltar</button>
     <div class="eyebrow">${esc(a.titulo)}</div><h2>Como você quer fazer?</h2>
@@ -514,6 +516,7 @@ async function abaAtividades(turma){
       html+=`<div class="row-item"><div class="ri-main"><div class="ri-title">${a.tipo==="memoria"?"🎮":"📝"} ${esc(a.titulo)}</div>
         <div class="ri-meta">${a.vale_nota?"Vale "+fmt(a.valor)+" pts":"Sem nota"}${a.dupla?" · 👥 dupla":""}${a.publico==="adaptados"?" · ♿ adaptados":(a.publico==="regulares"?" · regulares":"")}</div></div>
         <div class="row" style="flex:none;width:auto">
+          ${a.tipo==="quiz"?`<button class="btn sm ${a.embaralhar?'amber':'ghost'}" data-act="emb" data-id="${a.id}" data-on="${!!a.embaralhar}">${a.embaralhar?"🔀 Embaralhada":"📋 Em ordem"}</button>`:""}
           <button class="btn sm ${a.ativo?'soft':'ghost'}" data-act="toggle" data-id="${a.id}" data-on="${a.ativo}">${a.ativo?"Ativa":"Inativa"}</button>
           <button class="btn sm danger" data-act="del" data-id="${a.id}">Excluir</button></div></div>`;});
       html+='</div>';}
@@ -537,6 +540,7 @@ async function abaAtividades(turma){
     document.getElementById("cp").onclick=()=>{navigator.clipboard?.writeText(link);document.getElementById("cp").textContent="Copiado!";};
     c.querySelectorAll("[data-act]").forEach(b=>b.onclick=async()=>{try{
       if(b.dataset.act==="del"){if(confirm("Excluir esta atividade?")){await dbApagarAtividade(b.dataset.id);abaAtividades(turma);}}
+      else if(b.dataset.act==="emb"){await dbEmbaralhar(b.dataset.id,b.dataset.on!=="true");abaAtividades(turma);}
       else{await dbToggle(b.dataset.id,b.dataset.on!=="true");abaAtividades(turma);}
     }catch(e){erro(e);}});
     let loaded=null,loadedName="";
