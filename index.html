@@ -256,7 +256,7 @@ async function alunoAtividades(turma,nome){
       box.appendChild(d);});
   }catch(e){erro(e);}
 }
-function runnerStart(a,turma,nome,partner){ if(a.tipo==="quiz")return quizRun(a,turma,nome,partner); if(a.tipo==="memoria")return memoriaRun(a,turma,nome,partner);
+function runnerStart(a,turma,nome,partner){ if(a.tipo==="quiz")return quizEscolha(a,turma,nome,partner); if(a.tipo==="memoria")return memoriaRun(a,turma,nome,partner);
   app.innerHTML=`<div class="card">${SCHOOL}<p class="empty">Tipo de atividade não suportado.</p><button class="btn mt" id="v">Voltar</button></div>`;
   document.getElementById("v").onclick=()=>alunoAtividades(turma,nome); }
 function runner(a,turma,nome){ if(a.dupla) return duplaSelect(a,turma,nome); return runnerStart(a,turma,nome,null); }
@@ -288,9 +288,21 @@ function duplaSelect(a,turma,nome){
 }
 
 /* ---------- QUIZ (alternativas embaralhadas por aluno) ---------- */
-function quizRun(a,turma,nome,partner){
+function quizEscolha(a,turma,nome,partner){
+  setWide("760px");
+  app.innerHTML=`<div class="card">${SCHOOL}<button class="back" id="q-back">‹ Voltar</button>
+    <div class="eyebrow">${esc(a.titulo)}</div><h2>Como você quer fazer?</h2>
+    <p class="sub">As questões podem vir na ordem do professor ou em uma ordem diferente, só para você.</p>
+    <button class="btn mt" id="q-ord">📋 Ordem original</button>
+    <button class="btn soft mt-s" id="q-emb">🔀 Embaralhar as questões</button></div>`;
+  document.getElementById("q-back").onclick=()=>alunoAtividades(turma,nome);
+  document.getElementById("q-ord").onclick=()=>quizRun(a,turma,nome,partner,false);
+  document.getElementById("q-emb").onclick=()=>quizRun(a,turma,nome,partner,true);
+}
+function quizRun(a,turma,nome,partner,embar){
   const qs0=(a.conteudo&&a.conteudo.questoes)||[];
-  const ordem=a.embaralhar?shuffle(qs0.map((_,i)=>i)):qs0.map((_,i)=>i);
+  const emb=(embar===undefined)?!!a.embaralhar:embar;
+  const ordem=emb?shuffle(qs0.map((_,i)=>i)):qs0.map((_,i)=>i);
   const qs=ordem.map(i=>qs0[i]);
   let cur=0; const ans=new Array(qs.length).fill(null);
   const base=qs.map(q=>{ let opts,corr;
