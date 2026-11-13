@@ -4,11 +4,11 @@
     "arquivo": "8ano-revisao-oracoes.json",
     "ano": "8",
     "titulo": "Revisão — Orações Coordenadas e Subordinadas Substantivas (8º Ano)",
-    "descricao": "Preparação para a avaliação somativa de 17/11",
+    "descricao": "Trilha de estudo para a avaliação de 17/11, com explicação em cada questão",
     "tipo": "quiz",
-    "questoes": 20,
+    "questoes": 25,
     "valor": 5,
-    "embaralhar": true,
+    "embaralhar": false,
     "dupla": false,
     "publico": "todos"
   }

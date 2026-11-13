@@ -6,220 +6,298 @@
   "conteudo": {
     "questoes": [
       {
-        "frase": "“Muitos alunos trouxeram o celular, mas deixaram o aparelho na mochila; a escola percebeu melhora no pátio, portanto manteve a regra.”",
-        "enunciado": "As orações iniciadas por “mas” e por “portanto” classificam-se, respectivamente, como orações coordenadas sindéticas",
+        "frase": "“Os alunos chegaram cedo, mas a aula só começou às oito.”",
+        "enunciado": "Quantas orações há no período a seguir?",
         "alternativas": [
-          "adversativa e conclusiva.",
-          "explicativa e conclusiva.",
+          "duas",
+          "três",
+          "uma",
+          "quatro"
+        ],
+        "correta": 0,
+        "explicacao": "[Ponto de partida] Cada verbo ou locução verbal forma uma oração. Aqui há dois verbos (“chegaram” e “começou”), então são duas orações. Um período com duas ou mais orações é chamado de período composto."
+      },
+      {
+        "frase": "“A professora corrigiu as provas e entregou as notas.”",
+        "enunciado": "Esse período é formado por",
+        "alternativas": [
+          "uma oração principal e uma subordinada substantiva.",
+          "duas orações coordenadas, ligadas pela conjunção “e”.",
+          "uma única oração, pois há apenas um sujeito.",
+          "duas orações subordinadas, pois uma depende da outra."
+        ],
+        "correta": 1,
+        "explicacao": "[Ponto de partida] Há dois verbos (“corrigiu” e “entregou”), logo duas orações. Cada uma faz sentido sozinha e nenhuma completa o verbo da outra: são coordenadas, ligadas por “e”."
+      },
+      {
+        "frase": "“O diretor avisou que o recreio terminaria mais cedo.”",
+        "enunciado": "A oração “que o recreio terminaria mais cedo” é subordinada porque",
+        "alternativas": [
+          "completa o sentido do verbo “avisou” (avisou o quê?).",
+          "tem sentido completo e não depende de outra oração.",
+          "está ligada por uma conjunção que indica oposição.",
+          "vem separada da primeira oração por uma vírgula."
+        ],
+        "correta": 0,
+        "explicacao": "[Ponto de partida] Sem “que o recreio terminaria mais cedo”, o verbo “avisou” fica incompleto: avisou o quê? Quando uma oração completa o sentido de outra, ela é subordinada."
+      },
+      {
+        "enunciado": "Assinale a alternativa que define corretamente uma oração coordenada.",
+        "alternativas": [
+          "oração independente, que tem sentido completo mesmo separada das outras.",
+          "oração dependente, que completa o sentido de um verbo de outra oração.",
+          "oração que sempre começa com a palavra “que” e vem depois da principal.",
+          "oração que funciona como sujeito ou como objeto de outra oração."
+        ],
+        "correta": 0,
+        "explicacao": "[Ponto de partida] A coordenada é independente: separada das outras, continua fazendo sentido. As orações que dependem de outra (completando um verbo ou sendo o sujeito dele) são as subordinadas substantivas."
+      },
+      {
+        "enunciado": "Qual alternativa relaciona corretamente cada conjunção ao sentido que ela expressa?",
+        "alternativas": [
+          "“e” = adição; “mas” = explicação; “ou” = oposição; “pois” = alternância.",
+          "“e” = oposição; “mas” = adição; “ou” = alternância; “pois” = explicação.",
+          "“e” = adição; “mas” = oposição; “ou” = conclusão; “pois” = alternância.",
+          "“e” = adição; “mas” = oposição; “ou” = alternância; “pois” = explicação."
+        ],
+        "correta": 3,
+        "explicacao": "[Conjunções coordenativas] Guarde estes pares: “e” soma (aditiva), “mas” opõe (adversativa), “ou” oferece escolha (alternativa), “pois” explica (explicativa) e “portanto” conclui (conclusiva). Eles sustentam todas as classificações de coordenadas sindéticas."
+      },
+      {
+        "frase": "“Estudei muito, mas errei duas questões.”",
+        "enunciado": "A oração iniciada por “mas” classifica-se como coordenada sindética",
+        "alternativas": [
+          "aditiva, pois apenas soma outra informação à anterior.",
+          "adversativa, pois apresenta uma ideia que se opõe à anterior.",
+          "explicativa, pois apresenta o motivo da ideia anterior.",
+          "conclusiva, pois apresenta a consequência da ideia anterior."
+        ],
+        "correta": 1,
+        "explicacao": "[Conjunções coordenativas] Quem estuda muito espera acertar tudo, e o resultado contraria essa expectativa. “Mas” marca oposição: coordenada sindética adversativa."
+      },
+      {
+        "frase": "“A chuva parou, e as crianças voltaram a brincar na rua.”",
+        "enunciado": "A oração iniciada por “e” classifica-se como coordenada sindética",
+        "alternativas": [
+          "adversativa, pois contraria o fato dito antes.",
+          "explicativa, pois justifica o fato dito antes.",
+          "aditiva, pois soma outro fato ao que foi dito antes.",
+          "alternativa, pois oferece outra escolha ao leitor."
+        ],
+        "correta": 2,
+        "explicacao": "[Conjunções coordenativas] O “e” apenas acrescenta um fato novo (as crianças voltaram a brincar), sem opor, explicar ou concluir. É a coordenada sindética aditiva."
+      },
+      {
+        "frase": "“Ou você pede desculpas, ou a discussão vai continuar.”",
+        "enunciado": "A relação entre as duas orações desse período é de",
+        "alternativas": [
+          "oposição, pois uma ideia contraria a outra.",
+          "alternância, pois há duas possibilidades.",
+          "adição, pois as duas informações se somam.",
+          "conclusão, pois a segunda decorre da primeira."
+        ],
+        "correta": 1,
+        "explicacao": "[Conjunções coordenativas] O par “ou… ou…” apresenta duas possibilidades, e só uma delas vai acontecer. Esse par indica alternância e liga coordenadas sindéticas alternativas."
+      },
+      {
+        "frase": "“Leve agasalho, pois a noite será fria.”",
+        "enunciado": "A oração iniciada por “pois” classifica-se como coordenada sindética",
+        "alternativas": [
+          "conclusiva, pois apresenta a consequência da ordem dada.",
+          "adversativa, pois se opõe à ordem dada.",
+          "aditiva, pois soma outra ordem à anterior.",
+          "explicativa, pois apresenta o motivo da ordem dada."
+        ],
+        "correta": 3,
+        "explicacao": "[Conjunções coordenativas] Dica: dá para trocar “pois” por “porque”. A oração justifica a ordem (por que levar agasalho? porque a noite será fria). A explicativa dá o motivo; a conclusiva dá o resultado."
+      },
+      {
+        "frase": "“Não fiz o trabalho, portanto fiquei sem nota.”",
+        "enunciado": "A oração iniciada por “portanto” expressa",
+        "alternativas": [
+          "explicação, pois apresenta o motivo do que foi dito antes.",
+          "oposição, pois contraria o que foi dito antes.",
+          "conclusão, pois apresenta o resultado do que foi dito antes.",
+          "adição, pois soma outra informação ao que foi dito antes."
+        ],
+        "correta": 2,
+        "explicacao": "[Conjunções coordenativas] Não fazer o trabalho é a causa; ficar sem nota é o resultado. “Portanto” introduz a conclusão: coordenada sindética conclusiva. A explicativa faz o caminho inverso, pois dá a causa."
+      },
+      {
+        "frase": "“Treinamos o dia inteiro, mas não vencemos; ninguém reclamou, pois todos deram o melhor.”",
+        "enunciado": "As orações iniciadas por “mas” e por “pois” classificam-se, respectivamente, como orações coordenadas sindéticas",
+        "alternativas": [
           "adversativa e explicativa.",
-          "aditiva e adversativa."
+          "adversativa e conclusiva.",
+          "aditiva e explicativa.",
+          "explicativa e adversativa."
         ],
-        "correta": 0
+        "correta": 0,
+        "explicacao": "[Conjunções coordenativas] “Mas” marca oposição (treinou o dia inteiro, porém não venceu): adversativa. “Pois” dá o motivo de ninguém ter reclamado (todos deram o melhor): explicativa. Com “respectivamente”, classifique na ordem em que as conjunções aparecem."
       },
       {
-        "frase": "“Ou a escola oferece atividades no recreio, ou os alunos ficam parados; os professores apoiaram a proposta, pois perceberam mudança no pátio.”",
-        "enunciado": "As orações iniciadas por “ou” e por “pois” classificam-se, respectivamente, como orações coordenadas sindéticas",
+        "frase": "“Cheguei, olhei ao redor, não vi ninguém.”",
+        "enunciado": "Essas orações são coordenadas assindéticas porque",
         "alternativas": [
-          "alternativa e explicativa.",
-          "aditiva e conclusiva.",
-          "alternativa e conclusiva.",
-          "adversativa e explicativa."
+          "estão ligadas pela conjunção aditiva “e”.",
+          "estão ligadas apenas por vírgulas, sem conjunção.",
+          "dependem de uma oração principal para ter sentido.",
+          "completam o sentido do verbo “cheguei”."
         ],
-        "correta": 0
+        "correta": 1,
+        "explicacao": "[Coordenadas assindéticas] Assindética é a coordenada ligada sem conjunção (a- = sem): as orações aparecem em sequência, separadas só pela pontuação, e cada uma tem sentido completo. Com conjunção (“e”, “mas”…), seria sindética."
       },
       {
-        "frase": "“A diretora avisou que a reunião mudou de dia, e os pais confirmaram presença.”",
-        "enunciado": "As orações “que a reunião mudou de dia” e “e os pais confirmaram presença” classificam-se, respectivamente, como oração",
+        "frase": "“Abri o caderno, li o texto e respondi às questões.”",
+        "enunciado": "Sobre a ligação entre as orações desse período, é correto afirmar que",
         "alternativas": [
-          "subordinada substantiva objetiva direta e coordenada sindética aditiva.",
-          "subordinada substantiva subjetiva e coordenada sindética aditiva.",
+          "a 1ª e a 2ª: sem conjunção; a 2ª e a 3ª: conjunção aditiva “e”.",
+          "a 1ª e a 2ª: conjunção aditiva “e”; a 2ª e a 3ª: sem conjunção.",
+          "todas estão ligadas pela conjunção aditiva “e”, sem vírgulas.",
+          "nenhuma está ligada por conjunção, apenas por vírgulas."
+        ],
+        "correta": 0,
+        "explicacao": "[Coordenadas assindéticas] Entre “Abri o caderno” e “li o texto” há só uma vírgula (assindética). “E respondi às questões” vem com “e” (sindética aditiva). Um mesmo período pode misturar os dois tipos."
+      },
+      {
+        "enunciado": "Em qual alternativa todas as orações são coordenadas assindéticas?",
+        "alternativas": [
+          "“Acordei cedo, tomei café e fui para a escola.”",
+          "“Acordei cedo, mas perdi o ônibus da escola.”",
+          "“Acordei cedo, tomei café, fui para a escola.”",
+          "“Avisaram que eu acordei cedo para a escola.”"
+        ],
+        "correta": 2,
+        "explicacao": "[Coordenadas assindéticas] Só na alternativa em que não aparece nenhuma conjunção as orações são todas assindéticas. Na primeira há o “e”; na segunda, o “mas”; na última, o “que” liga uma oração subordinada."
+      },
+      {
+        "frase": "“Todos esperavam que a chuva passasse.”",
+        "enunciado": "A oração “que a chuva passasse” é classificada como oração",
+        "alternativas": [
+          "subordinada substantiva subjetiva.",
+          "subordinada substantiva objetiva direta.",
+          "coordenada sindética aditiva.",
+          "coordenada assindética."
+        ],
+        "correta": 1,
+        "explicacao": "[Subordinadas substantivas] Teste: esperavam o quê? — que a chuva passasse. A oração completa o verbo “esperavam”, sem preposição: subordinada substantiva objetiva direta."
+      },
+      {
+        "frase": "“É importante que todos cheguem no horário.”",
+        "enunciado": "A oração “que todos cheguem no horário” é classificada como oração",
+        "alternativas": [
+          "subordinada substantiva objetiva direta.",
+          "coordenada sindética explicativa.",
+          "subordinada substantiva subjetiva.",
+          "coordenada sindética adversativa."
+        ],
+        "correta": 2,
+        "explicacao": "[Subordinadas substantivas] Teste: o que é importante? — que todos cheguem no horário. A oração responde à pergunta feita ao verbo “é” e funciona como o sujeito dele: subordinada substantiva subjetiva."
+      },
+      {
+        "enunciado": "Uma oração subordinada substantiva pode ser trocada por “isso”. Em qual alternativa essa troca é possível?",
+        "alternativas": [
+          "“Li o livro, mas não gostei.” → “Li o livro, mas isso.”",
+          "“Saí cedo, pois chovia.” → “Saí cedo, pois isso.”",
+          "“Todos viram que a aula acabou.” → “Todos viram isso.”",
+          "“Entrei, olhei, saí.” → “Entrei, isso, saí.”"
+        ],
+        "correta": 2,
+        "explicacao": "[Subordinadas substantivas] A oração substantiva ocupa o lugar de um substantivo ou pronome (sujeito ou objeto), por isso pode virar “isso”: “Todos viram isso”. Nas coordenadas a troca não funciona, porque elas não completam o verbo de outra oração."
+      },
+      {
+        "frase": "“Os vizinhos disseram que a obra termina em dezembro.”",
+        "enunciado": "Qual é a oração principal desse período?",
+        "alternativas": [
+          "“que a obra termina em dezembro”",
+          "“a obra termina em dezembro”",
+          "“termina em dezembro”",
+          "“Os vizinhos disseram”"
+        ],
+        "correta": 3,
+        "explicacao": "[Subordinadas substantivas] A principal é a que não depende de outra: “Os vizinhos disseram”. A oração iniciada por “que” completa o verbo “disseram” (disseram o quê?), por isso é a subordinada."
+      },
+      {
+        "frase": "“É necessário que o aluno leia o enunciado com calma.”",
+        "enunciado": "Qual é a oração principal desse período?",
+        "alternativas": [
+          "“É necessário”",
+          "“É necessário que o aluno”",
+          "“que o aluno leia o enunciado”",
+          "“leia o enunciado com calma”"
+        ],
+        "correta": 0,
+        "explicacao": "[Subordinadas substantivas] Na subjetiva, a principal fica incompleta sem a subordinada: “É necessário” + o quê? — “que o aluno leia o enunciado com calma”. A subordinada é o sujeito; a principal é só “É necessário”."
+      },
+      {
+        "enunciado": "Em qual alternativa a oração iniciada por “que” funciona como sujeito da oração principal?",
+        "alternativas": [
+          "“O diretor garantiu que a prova será adiada.”",
+          "“Os alunos souberam que a prova foi adiada.”",
+          "“A turma percebeu que a prova seria adiada.”",
+          "“É possível que a prova seja adiada.”"
+        ],
+        "correta": 3,
+        "explicacao": "[Subordinadas substantivas] Na última, “que a prova seja adiada” responde a “o que é possível?”: é o sujeito (subjetiva). Nas outras, a oração completa o verbo (garantiu, souberam, percebeu o quê?): são objetivas diretas."
+      },
+      {
+        "enunciado": "Em qual alternativa a oração iniciada por “que” completa o sentido de um verbo, funcionando como objeto direto?",
+        "alternativas": [
+          "“É certo que o time vai ganhar.”",
+          "“Convém que todos participem.”",
+          "“É preciso que o time vença.”",
+          "“O time sabe que vai ganhar.”"
+        ],
+        "correta": 3,
+        "explicacao": "[Subordinadas substantivas] Em “O time sabe que vai ganhar”: sabe o quê? — que vai ganhar (objetiva direta). Nas demais, a oração é o sujeito de “é certo”, “convém” e “é preciso” (o que é certo? o que convém? o que é preciso?): são subjetivas."
+      },
+      {
+        "frase": "“A professora garantiu que a atividade valeria nota.”",
+        "enunciado": "A oração “que a atividade valeria nota” é subordinada substantiva objetiva direta porque",
+        "alternativas": [
+          "funciona como sujeito do verbo “garantiu”.",
+          "completa o sentido do verbo “garantiu” (garantiu o quê?).",
+          "apenas soma uma informação, ligada pela conjunção “e”.",
+          "apresenta o motivo de a professora ter garantido algo."
+        ],
+        "correta": 1,
+        "explicacao": "[Como cai na prova] A justificativa de uma objetiva direta é sempre “completa o verbo X”. Se fosse o sujeito, seria subjetiva; se só somasse uma informação com “e”, seria coordenada aditiva; se desse um motivo, seria coordenada explicativa."
+      },
+      {
+        "frase": "“O coordenador explicou que as aulas de reforço começariam na segunda-feira, e os alunos do 8º ano receberam o cronograma no mesmo dia.”",
+        "enunciado": "As orações “que as aulas de reforço começariam na segunda-feira” e “e os alunos do 8º ano receberam o cronograma no mesmo dia” classificam-se, respectivamente, como",
+        "alternativas": [
           "coordenada sindética aditiva e subordinada substantiva objetiva direta.",
-          "subordinada substantiva objetiva direta e coordenada sindética explicativa."
+          "subordinada substantiva subjetiva e coordenada sindética aditiva.",
+          "subordinada substantiva objetiva direta e coordenada sindética explicativa.",
+          "subordinada substantiva objetiva direta e coordenada sindética aditiva."
         ],
-        "correta": 0
+        "correta": 3,
+        "explicacao": "[Como cai na prova] Explicou o quê? — que as aulas começariam…: objetiva direta. A segunda oração só acrescenta outro fato, ligada por “e”: aditiva. Em períodos longos, comece achando os verbos e as conjunções para separar as orações."
       },
       {
-        "enunciado": "Assinale a alternativa em que a oração destacada funciona como sujeito da oração principal.",
-        "alternativas": [
-          "“Os alunos disseram que o intervalo passou rápido”",
-          "“É necessário que a escola avise as famílias”",
-          "“A professora percebeu que a turma estava cansada”",
-          "“Todos notaram que o pátio ficou mais cheio”"
-        ],
-        "correta": 1
-      },
-      {
-        "enunciado": "Assinale a alternativa em que a oração destacada funciona como sujeito da oração principal.",
-        "alternativas": [
-          "“Convém que todos leiam o aviso da secretaria”",
-          "“O coordenador explicou que a prova foi adiada”",
-          "“Os pais souberam que a reunião seria on-line”",
-          "“A turma garantiu que faria a tarefa”"
-        ],
-        "correta": 0
-      },
-      {
-        "enunciado": "Assinale a alternativa em que a oração destacada completa o sentido do verbo da oração principal, funcionando como objeto direto.",
-        "alternativas": [
-          "“É importante que a família acompanhe os estudos”",
-          "“Convém que o aluno revise o conteúdo”",
-          "“A professora confirmou que a atividade valia nota”",
-          "“Era necessário que a escola mudasse o horário”"
-        ],
-        "correta": 2
-      },
-      {
-        "frase": "“O professor percebeu que a turma tinha estudado para a prova.”",
-        "enunciado": "A oração “que a turma tinha estudado para a prova” é classificada como oração",
-        "alternativas": [
-          "subordinada substantiva subjetiva, pois é o sujeito de “percebeu”.",
-          "subordinada substantiva objetiva direta, pois completa o verbo “perceber”.",
-          "coordenada sindética explicativa, pois explica o que foi percebido.",
-          "coordenada sindética aditiva, pois acrescenta uma informação ao verbo."
-        ],
-        "correta": 1
-      },
-      {
-        "frase": "“É provável que a chuva atrapalhe o passeio da turma.”",
-        "enunciado": "A oração “que a chuva atrapalhe o passeio da turma” é classificada como oração",
-        "alternativas": [
-          "subordinada substantiva objetiva direta, pois completa o verbo “é”.",
-          "subordinada substantiva subjetiva, pois funciona como sujeito de “é provável”.",
-          "coordenada sindética conclusiva, pois conclui a ideia anterior.",
-          "coordenada assindética, pois não há conjunção ligando as orações."
-        ],
-        "correta": 1
-      },
-      {
-        "frase": "“A escola comprou novos livros, pois a biblioteca estava desatualizada.”",
-        "enunciado": "A oração iniciada por “pois” é classificada como oração",
-        "alternativas": [
-          "coordenada sindética conclusiva, pois apresenta o resultado da compra.",
-          "coordenada sindética explicativa, pois apresenta o motivo da afirmação anterior.",
-          "subordinada substantiva objetiva direta, pois completa o verbo “comprou”.",
-          "coordenada sindética adversativa, pois contraria a ideia anterior."
-        ],
-        "correta": 1
-      },
-      {
-        "frase": "“Leia o rótulo antes de usar o produto. O uso errado pode causar acidentes.”",
-        "enunciado": "Se essas duas orações fossem unidas em um só período, sem mudar o sentido, a conjunção adequada para ligá-las seria",
+        "frase": "“O prazo de validade do remédio venceu. Ele não deve ser usado.”",
+        "enunciado": "Se essas duas orações fossem unidas em um só período, sem mudar o sentido, a conjunção adequada seria",
         "alternativas": [
           "“mas”, já que a segunda frase contraria a primeira.",
           "“ou”, já que as frases indicam duas escolhas.",
           "“pois”, já que a segunda frase justifica a primeira.",
           "“portanto”, já que a segunda frase conclui a primeira."
         ],
-        "correta": 2
+        "correta": 3,
+        "explicacao": "[Como cai na prova] O remédio venceu (causa) e por isso não deve ser usado (consequência): a segunda frase é a conclusão da primeira, então “portanto”. Cuidado para não inverter: em “Não use o remédio. Ele venceu.”, a segunda frase daria o motivo, e a conjunção seria “pois”."
       },
       {
-        "frase": "“O time treinou todos os dias da semana. A equipe venceu o campeonato.”",
-        "enunciado": "Se essas duas orações fossem unidas em um só período, sem mudar o sentido, a conjunção adequada para ligá-las seria",
+        "frase": "(I) “A bibliotecária organizou os livros e arrumou as mesas.” (II) “A bibliotecária avisou que a biblioteca fecharia mais cedo.”",
+        "enunciado": "Comparando a oração “e arrumou as mesas” (I) com a oração “que a biblioteca fecharia mais cedo” (II), é correto afirmar que",
         "alternativas": [
-          "“portanto”, já que a segunda frase apresenta a conclusão da primeira.",
-          "“pois”, já que a segunda frase explica a primeira.",
-          "“mas”, já que a segunda frase se opõe à primeira.",
-          "“ou”, já que as frases indicam alternância."
+          "a I completa o verbo “organizou” e é subordinada; a II apenas se soma à anterior e é coordenada.",
+          "as duas são coordenadas, pois nas duas há verbo e as duas têm sentido completo sozinhas.",
+          "a I apenas se soma à anterior e é coordenada; a II completa o verbo “avisou” e é subordinada.",
+          "as duas são subordinadas, pois nas duas há uma oração anterior da qual elas dependem."
         ],
-        "correta": 0
-      },
-      {
-        "frase": "“A coordenadora, responsável pelo turno da manhã, explicou que o horário mudaria em novembro, e os professores receberam o novo quadro na mesma semana.”",
-        "enunciado": "A oração “e os professores receberam o novo quadro na mesma semana” classifica-se como oração",
-        "alternativas": [
-          "coordenada sindética aditiva.",
-          "subordinada substantiva objetiva direta.",
-          "coordenada sindética explicativa.",
-          "subordinada substantiva subjetiva."
-        ],
-        "correta": 0
-      },
-      {
-        "frase": "“Os estudantes do 8º ano, que participaram do projeto de leitura, informaram que levariam os livros para casa, e a biblioteca registrou os empréstimos.”",
-        "enunciado": "A oração “que levariam os livros para casa” classifica-se como oração",
-        "alternativas": [
-          "coordenada sindética aditiva.",
-          "subordinada substantiva objetiva direta.",
-          "coordenada assindética.",
-          "subordinada substantiva subjetiva."
-        ],
-        "correta": 1
-      },
-      {
-        "frase": "“Os moradores do bairro afirmam que a praça melhorou depois da reforma.”",
-        "enunciado": "Qual é a oração principal desse período?",
-        "alternativas": [
-          "“que a praça melhorou depois da reforma”",
-          "“Os moradores do bairro afirmam”",
-          "“depois da reforma”",
-          "“a praça melhorou”"
-        ],
-        "correta": 1
-      },
-      {
-        "frase": "“É fundamental que as famílias acompanhem as notas dos filhos.”",
-        "enunciado": "Qual é a oração principal desse período?",
-        "alternativas": [
-          "“É fundamental”",
-          "“que as famílias acompanhem as notas dos filhos”",
-          "“as notas dos filhos”",
-          "“acompanhem as notas dos filhos”"
-        ],
-        "correta": 0
-      },
-      {
-        "frase": "“No fim da tarde, o pátio mudou: os alunos conversam, correm, jogam bola.”",
-        "enunciado": "As orações desse período classificam-se como",
-        "alternativas": [
-          "coordenadas sindéticas aditivas.",
-          "coordenadas assindéticas.",
-          "subordinadas substantivas objetivas diretas.",
-          "uma oração principal e três subordinadas."
-        ],
-        "correta": 1
-      },
-      {
-        "frase": "“Chegou cedo, abriu a sala, organizou as carteiras.”",
-        "enunciado": "Essas orações são chamadas de assindéticas porque",
-        "alternativas": [
-          "estão ligadas sem conjunção, apenas pela pontuação.",
-          "completam o sentido do primeiro verbo.",
-          "estão ligadas pela conjunção “e”.",
-          "dependem de uma oração principal para ter sentido."
-        ],
-        "correta": 0
-      },
-      {
-        "frase": "(I) “A secretária organizou os documentos e enviou a lista para a direção.” (II) “A secretária informou que a lista estava pronta.”",
-        "enunciado": "Comparando a oração “e enviou a lista para a direção” (I) com a oração “que a lista estava pronta” (II), é correto afirmar que",
-        "alternativas": [
-          "a I apenas se soma à oração anterior, por isso é coordenada; a II completa o verbo “informou”, por isso é subordinada.",
-          "a I completa o verbo “organizou”, por isso é subordinada; a II apenas se soma à anterior, por isso é coordenada.",
-          "as duas são coordenadas, pois as duas têm sentido completo sozinhas.",
-          "as duas são subordinadas, pois as duas dependem da primeira oração."
-        ],
-        "correta": 0
-      },
-      {
-        "enunciado": "Para saber se uma oração iniciada por “que” é subordinada substantiva, o teste mais seguro é",
-        "alternativas": [
-          "verificar se ela pode ser substituída por “isso”, completando o verbo da outra oração ou sendo o sujeito dele.",
-          "verificar se ela vem logo depois de uma vírgula.",
-          "verificar se ela tem um verbo conjugado.",
-          "verificar se ela é a oração mais longa do período."
-        ],
-        "correta": 0
-      },
-      {
-        "frase": "“A turma estudou bastante para a prova, mas o resultado ficou abaixo do esperado.”",
-        "enunciado": "A conjunção “mas” estabelece, entre as orações, uma relação de",
-        "alternativas": [
-          "oposição.",
-          "conclusão.",
-          "explicação.",
-          "adição."
-        ],
-        "correta": 0
+        "correta": 2,
+        "explicacao": "[Como cai na prova] “e arrumou as mesas” só soma uma ação à anterior e tem sentido próprio: coordenada. “que a biblioteca fecharia mais cedo” responde a “avisou o quê?”; sem ela, o verbo fica incompleto: subordinada. Pergunte sempre: a oração completa o verbo de outra (subordinada) ou só se junta a ela (coordenada)?"
       }
     ]
   }
